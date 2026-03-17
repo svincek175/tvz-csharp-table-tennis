@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TableTennisTracker.Console/TableTennisTracker.Console.csproj" />
+  <Project Path="TableTennisTracker.Model/TableTennisTracker.Model.csproj" />
+</Solution>
