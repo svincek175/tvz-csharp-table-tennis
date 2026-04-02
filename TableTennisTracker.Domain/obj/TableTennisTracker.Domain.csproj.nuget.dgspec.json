@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Model/TableTennisTracker.Model.csproj": {}
+    "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj": {}
   },
   "projects": {
-    "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Model/TableTennisTracker.Model.csproj": {
+    "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Model/TableTennisTracker.Model.csproj",
-        "projectName": "TableTennisTracker.Model",
-        "projectPath": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Model/TableTennisTracker.Model.csproj",
+        "projectUniqueName": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj",
+        "projectName": "TableTennisTracker.Domain",
+        "projectPath": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj",
         "packagesPath": "/Users/simon.vincek/.nuget/packages/",
-        "outputPath": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Model/obj/",
+        "outputPath": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/simon.vincek/.nuget/NuGet/NuGet.Config"

@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "TableTennisTracker.Console/1.0.0": {
+        "dependencies": {
+          "TableTennisTracker.Domain": "1.0.0"
+        },
+        "runtime": {
+          "TableTennisTracker.Console.dll": {}
+        }
+      },
+      "TableTennisTracker.Domain/1.0.0": {
+        "runtime": {
+          "TableTennisTracker.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TableTennisTracker.Console/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TableTennisTracker.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

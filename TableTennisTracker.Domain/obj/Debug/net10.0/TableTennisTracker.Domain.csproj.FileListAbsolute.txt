@@ -1,0 +1,12 @@
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/bin/Debug/net10.0/TableTennisTracker.Domain.deps.json
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/bin/Debug/net10.0/TableTennisTracker.Domain.dll
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/bin/Debug/net10.0/TableTennisTracker.Domain.pdb
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/Debug/net10.0/TableTennisTracker.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/Debug/net10.0/TableTennisTracker.Domain.AssemblyInfoInputs.cache
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/Debug/net10.0/TableTennisTracker.Domain.AssemblyInfo.cs
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/Debug/net10.0/TableTennisTracker.Domain.csproj.CoreCompileInputs.cache
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/Debug/net10.0/TableTennisTracker.Domain.sourcelink.json
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/Debug/net10.0/TableTennisTracker.Domain.dll
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/Debug/net10.0/refint/TableTennisTracker.Domain.dll
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/Debug/net10.0/TableTennisTracker.Domain.pdb
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/Debug/net10.0/ref/TableTennisTracker.Domain.dll
