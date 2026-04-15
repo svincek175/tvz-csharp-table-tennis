@@ -1,0 +1,33 @@
+@model IEnumerable<TableTennisTracker.Domain.Models.Registration>
+
+@{
+    ViewData["Title"] = "Registrations";
+}
+
+<div style="padding: 20px;">
+    <h1>📋 Registrations</h1>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead style="background-color: #f5f5f5;">
+            <tr>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tournament</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Player</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Seed #</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Registered</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Checked In</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registration in Model)
+            {
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 10px; border: 1px solid #ddd;">@registration.Tournament?.Name</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>@(registration.Player is not null ? $"{registration.Player.FirstName} {registration.Player.LastName}" : "—")</strong></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@registration.SeedNumber</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@registration.RegisteredUtc:g</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@(registration.IsCheckedIn ? "✓ Yes" : "✗ No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

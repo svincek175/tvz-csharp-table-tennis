@@ -1,0 +1,39 @@
+@model IEnumerable<TableTennisTracker.Domain.Models.Match>
+
+@{
+    ViewData["Title"] = "Matches";
+}
+
+<div style="padding: 20px;">
+    <h1>🎾 Matches</h1>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead style="background-color: #f5f5f5;">
+            <tr>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Round</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Table</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Scheduled Start</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Actual Start</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Completed</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Status</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Best Of</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Winner</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var match in Model)
+            {
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 10px; border: 1px solid #ddd;">@match.RoundNumber</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@match.TableNumber</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@match.ScheduledStartUtc:g</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@(match.ActualStartUtc.HasValue ? match.ActualStartUtc.Value.ToString("g") : "—")</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@(match.CompletedUtc.HasValue ? match.CompletedUtc.Value.ToString("g") : "—")</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>@match.Status</strong></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@match.BestOfSets</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@(match.WinnerPlayer is not null ? $"{match.WinnerPlayer.FirstName} {match.WinnerPlayer.LastName}" : "—")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

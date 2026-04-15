@@ -1,0 +1,39 @@
+@model IEnumerable<TableTennisTracker.Domain.Models.Tournament>
+
+@{
+    ViewData["Title"] = "Tournaments";
+}
+
+<div style="padding: 20px;">
+    <h1>🏆 Tournaments</h1>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead style="background-color: #f5f5f5;">
+            <tr>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Name</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Season</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Start Date</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">End Date</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Max Players</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Organizer</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ranking Event</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Venue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tournament in Model)
+            {
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>@tournament.Name</strong></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@tournament.SeasonLabel</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@tournament.StartUtc:yyyy-MM-dd HH:mm</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@tournament.EndUtc:yyyy-MM-dd HH:mm</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@tournament.MaxPlayers</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@tournament.OrganizerName</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@(tournament.IsRankingEvent ? "✓ Yes" : "✗ No")</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@tournament.Venue?.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

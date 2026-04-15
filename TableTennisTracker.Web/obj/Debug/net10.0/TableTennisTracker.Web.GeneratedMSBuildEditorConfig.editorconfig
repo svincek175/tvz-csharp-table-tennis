@@ -21,3 +21,43 @@ build_property.MSBuildProjectDirectory = /Users/simon.vincek/tvz-csharp-table-te
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Matches/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWF0Y2hlcy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/MatchParticipants/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWF0Y2hQYXJ0aWNpcGFudHMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/MatchSetResults/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWF0Y2hTZXRSZXN1bHRzL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Players/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGxheWVycy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Registrations/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVnaXN0cmF0aW9ucy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Tournaments/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVG91cm5hbWVudHMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Venues/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudWVzL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

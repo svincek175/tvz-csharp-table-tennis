@@ -31,3 +31,5 @@
 /Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/bin/Debug/net10.0/TableTennisTracker.Domain.pdb
 /Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/TableTennisTracker.Web.csproj.AssemblyReference.cache
 /Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/TableTen.A5099418.Up2Date
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/TableTennisTracker.Web.RazorAssemblyInfo.cache
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/TableTennisTracker.Web.RazorAssemblyInfo.cs
