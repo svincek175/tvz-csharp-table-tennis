@@ -2,34 +2,37 @@
 
 @{
     ViewData["Title"] = "Players";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Players", "/Players") };
 }
 
-<div style="padding: 20px;">
+<div class="index-container">
     <h1>👥 Players</h1>
-    
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead style="background-color: #f5f5f5;">
+
+    <table class="index-table">
+        <thead>
             <tr>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">First Name</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Last Name</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Date of Birth</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Country</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ranking Points</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Active</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Created</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Date of Birth</th>
+                <th>Country</th>
+                <th>Ranking Points</th>
+                <th>Active</th>
+                <th>Created</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var player in Model)
             {
-                <tr style="border-bottom: 1px solid #ddd;">
-                    <td style="padding: 10px; border: 1px solid #ddd;">@player.FirstName</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>@player.LastName</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@player.DateOfBirth</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@player.CountryCode</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@player.CurrentRankingPoints pts</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@(player.IsActive ? "✓ Yes" : "✗ No")</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@player.CreatedUtc:g</td>
+                <tr>
+                    <td>@player.FirstName</td>
+                    <td><strong>@player.LastName</strong></td>
+                    <td>@player.DateOfBirth</td>
+                    <td>@player.CountryCode</td>
+                    <td>@player.CurrentRankingPoints pts</td>
+                    <td>@(player.IsActive ? "✓ Yes" : "✗ No")</td>
+                    <td>@player.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td><a href="/Players/Details/@player.Id">View Details</a></td>
                 </tr>
             }
         </tbody>

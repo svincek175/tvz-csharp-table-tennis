@@ -1,0 +1,17 @@
+@model TableTennisTracker.Domain.Models.MatchParticipant
+
+@{
+    ViewData["Title"] = "Match Participant Details";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Participants", "/MatchParticipants"), ($"Participant {Model.Id.ToString().Substring(0, 8)}", "") };
+}
+
+<div class="details-container">
+    <h1>👫 Match Participant Details</h1>
+
+    <div class="details-grid">
+        <strong>Match Id</strong><span>@Model.MatchId</span>
+        <strong>Player</strong><span>@(Model.Player is null ? "—" : $"{Model.Player.FirstName} {Model.Player.LastName}")</span>
+        <strong>Slot</strong><span>@Model.Slot</span>
+        <strong>Sets Won</strong><span>@Model.ScoreSetsWon</span>
+    </div>
+</div>

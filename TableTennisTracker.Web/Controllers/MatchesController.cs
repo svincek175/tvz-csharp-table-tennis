@@ -17,4 +17,15 @@ public class MatchesController : Controller
         var matches = await _matchRepository.GetAllAsync();
         return View(matches);
     }
+
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var match = await _matchRepository.GetByIdAsync(id);
+        if (match is null)
+        {
+            return NotFound();
+        }
+
+        return View(match);
+    }
 }

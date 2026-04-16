@@ -1,0 +1,24 @@
+@model TableTennisTracker.Domain.Models.Tournament
+
+@{
+    ViewData["Title"] = "Tournament Details";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Tournaments", "/Tournaments"), (Model.Name, "") };
+}
+
+<div class="details-container">
+    <h1>🏆 Tournament Details</h1>
+
+    <div class="details-grid">
+        <strong>Name</strong><span>@Model.Name</span>
+        <strong>Season</strong><span>@Model.SeasonLabel</span>
+        <strong>Start</strong><span>@Model.StartUtc.ToString("yyyy-MM-dd HH:mm")</span>
+        <strong>End</strong><span>@Model.EndUtc.ToString("yyyy-MM-dd HH:mm")</span>
+        <strong>Max Players</strong><span>@Model.MaxPlayers</span>
+        <strong>Best Of Sets</strong><span>@Model.BestOfSets</span>
+        <strong>Organizer</strong><span>@Model.OrganizerName</span>
+        <strong>Ranking Event</strong><span>@(Model.IsRankingEvent ? "Yes" : "No")</span>
+        <strong>Venue</strong><span>@Model.Venue?.Name</span>
+        <strong>Registrations</strong><span>@Model.Registrations.Count</span>
+        <strong>Matches</strong><span>@Model.Matches.Count</span>
+    </div>
+</div>

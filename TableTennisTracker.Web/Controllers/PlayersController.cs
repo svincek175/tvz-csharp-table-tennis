@@ -17,4 +17,15 @@ public class PlayersController : Controller
         var players = await _playerRepository.GetAllAsync();
         return View(players);
     }
+
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var player = await _playerRepository.GetByIdAsync(id);
+        if (player is null)
+        {
+            return NotFound();
+        }
+
+        return View(player);
+    }
 }

@@ -1,0 +1,18 @@
+@model TableTennisTracker.Domain.Models.Registration
+
+@{
+    ViewData["Title"] = "Registration Details";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Registrations", "/Registrations"), ($"Registration {Model.Id.ToString().Substring(0, 8)}", "") };
+}
+
+<div class="details-container">
+    <h1>📋 Registration Details</h1>
+
+    <div class="details-grid">
+        <strong>Tournament</strong><span>@Model.Tournament?.Name</span>
+        <strong>Player</strong><span>@(Model.Player is null ? "—" : $"{Model.Player.FirstName} {Model.Player.LastName}")</span>
+        <strong>Seed Number</strong><span>@Model.SeedNumber</span>
+        <strong>Registered At</strong><span>@Model.RegisteredUtc.ToString("yyyy-MM-dd HH:mm")</span>
+        <strong>Checked In</strong><span>@(Model.IsCheckedIn ? "Yes" : "No")</span>
+    </div>
+</div>

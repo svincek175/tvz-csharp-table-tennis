@@ -2,28 +2,31 @@
 
 @{
     ViewData["Title"] = "Match Set Results";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Set Results", "/MatchSetResults") };
 }
 
-<div style="padding: 20px;">
+<div class="index-container">
     <h1>📊 Match Set Results</h1>
-    
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead style="background-color: #f5f5f5;">
+
+    <table class="index-table">
+        <thead>
             <tr>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Match ID</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Set #</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Player 1 Points</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Player 2 Points</th>
+                <th>Match ID</th>
+                <th>Set #</th>
+                <th>Player 1 Points</th>
+                <th>Player 2 Points</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var setResult in Model)
             {
-                <tr style="border-bottom: 1px solid #ddd;">
-                    <td style="padding: 10px; border: 1px solid #ddd;">@setResult.MatchId.ToString().Substring(0, 8)...</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@setResult.SetNumber</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>@setResult.PlayerOnePoints</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>@setResult.PlayerTwoPoints</strong></td>
+                <tr>
+                    <td>@setResult.MatchId</td>
+                    <td>@setResult.SetNumber</td>
+                    <td><strong>@setResult.PlayerOnePoints</strong></td>
+                    <td><strong>@setResult.PlayerTwoPoints</strong></td>
+                    <td><a href="/MatchSetResults/Details/@setResult.Id">View Details</a></td>
                 </tr>
             }
         </tbody>

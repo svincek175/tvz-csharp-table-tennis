@@ -2,34 +2,37 @@
 
 @{
     ViewData["Title"] = "Venues";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Venues", "/Venues") };
 }
 
-<div style="padding: 20px;">
-    <h1>📍 Venues</h1>
-    
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead style="background-color: #f5f5f5;">
+<div class="index-container">
+    <h1>🏢 Venues</h1>
+
+    <table class="index-table">
+        <thead>
             <tr>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Name</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">City</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Country</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Address</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tables</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Capacity</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Time Zone</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Address</th>
+                <th>Tables</th>
+                <th>Capacity</th>
+                <th>Time Zone</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var venue in Model)
             {
-                <tr style="border-bottom: 1px solid #ddd;">
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>@venue.Name</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@venue.City</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@venue.CountryCode</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@venue.AddressLine</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@venue.NumberOfTables</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@venue.Capacity</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@venue.TimeZoneId</td>
+                <tr>
+                    <td><strong>@venue.Name</strong></td>
+                    <td>@venue.City</td>
+                    <td>@venue.CountryCode</td>
+                    <td>@venue.AddressLine</td>
+                    <td>@venue.NumberOfTables</td>
+                    <td>@venue.Capacity</td>
+                    <td>@venue.TimeZoneId</td>
+                    <td><a href="/Venues/Details/@venue.Id">View Details</a></td>
                 </tr>
             }
         </tbody>

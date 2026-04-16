@@ -1,0 +1,21 @@
+@model TableTennisTracker.Domain.Models.Venue
+
+@{
+    ViewData["Title"] = "Venue Details";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Venues", "/Venues"), (Model.Name, "") };
+}
+
+<div class="details-container">
+    <h1>📍 Venue Details</h1>
+
+    <div class="details-grid">
+        <strong>Name</strong><span>@Model.Name</span>
+        <strong>City</strong><span>@Model.City</span>
+        <strong>Country Code</strong><span>@Model.CountryCode</span>
+        <strong>Address</strong><span>@Model.AddressLine</span>
+        <strong>Number of Tables</strong><span>@Model.NumberOfTables</span>
+        <strong>Capacity</strong><span>@Model.Capacity</span>
+        <strong>Time Zone</strong><span>@Model.TimeZoneId</span>
+        <strong>Tournaments Hosted</strong><span>@Model.Tournaments.Count</span>
+    </div>
+</div>

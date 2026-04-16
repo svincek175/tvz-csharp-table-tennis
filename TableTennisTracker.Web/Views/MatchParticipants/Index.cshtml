@@ -2,28 +2,31 @@
 
 @{
     ViewData["Title"] = "Match Participants";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Participants", "/MatchParticipants") };
 }
 
-<div style="padding: 20px;">
+<div class="index-container">
     <h1>👫 Match Participants</h1>
-    
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead style="background-color: #f5f5f5;">
+
+    <table class="index-table">
+        <thead>
             <tr>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Match ID</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Player</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Slot</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Sets Won</th>
+                <th>Match ID</th>
+                <th>Player</th>
+                <th>Slot</th>
+                <th>Sets Won</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var participant in Model)
             {
-                <tr style="border-bottom: 1px solid #ddd;">
-                    <td style="padding: 10px; border: 1px solid #ddd;">@participant.MatchId.ToString().Substring(0, 8)...</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>@(participant.Player is not null ? $"{participant.Player.FirstName} {participant.Player.LastName}" : "—")</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@participant.Slot</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@participant.ScoreSetsWon</td>
+                <tr>
+                    <td>@participant.MatchId</td>
+                    <td><strong>@(participant.Player is not null ? $"{participant.Player.FirstName} {participant.Player.LastName}" : "—")</strong></td>
+                    <td>@participant.Slot</td>
+                    <td>@participant.ScoreSetsWon</td>
+                    <td><a href="/MatchParticipants/Details/@participant.Id">View Details</a></td>
                 </tr>
             }
         </tbody>

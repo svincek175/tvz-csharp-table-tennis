@@ -2,30 +2,33 @@
 
 @{
     ViewData["Title"] = "Registrations";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Registrations", "/Registrations") };
 }
 
-<div style="padding: 20px;">
+<div class="index-container">
     <h1>📋 Registrations</h1>
-    
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead style="background-color: #f5f5f5;">
+
+    <table class="index-table">
+        <thead>
             <tr>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tournament</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Player</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Seed #</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Registered</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Checked In</th>
+                <th>Tournament</th>
+                <th>Player</th>
+                <th>Seed #</th>
+                <th>Registered</th>
+                <th>Checked In</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var registration in Model)
             {
-                <tr style="border-bottom: 1px solid #ddd;">
-                    <td style="padding: 10px; border: 1px solid #ddd;">@registration.Tournament?.Name</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>@(registration.Player is not null ? $"{registration.Player.FirstName} {registration.Player.LastName}" : "—")</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@registration.SeedNumber</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@registration.RegisteredUtc:g</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">@(registration.IsCheckedIn ? "✓ Yes" : "✗ No")</td>
+                <tr>
+                    <td>@registration.Tournament?.Name</td>
+                    <td><strong>@(registration.Player is not null ? $"{registration.Player.FirstName} {registration.Player.LastName}" : "—")</strong></td>
+                    <td>@registration.SeedNumber</td>
+                    <td>@registration.RegisteredUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@(registration.IsCheckedIn ? "✓ Yes" : "✗ No")</td>
+                    <td><a href="/Registrations/Details/@registration.Id">View Details</a></td>
                 </tr>
             }
         </tbody>

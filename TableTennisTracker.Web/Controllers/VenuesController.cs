@@ -17,4 +17,15 @@ public class VenuesController : Controller
         var venues = await _venueRepository.GetAllAsync();
         return View(venues);
     }
+
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var venue = await _venueRepository.GetByIdAsync(id);
+        if (venue is null)
+        {
+            return NotFound();
+        }
+
+        return View(venue);
+    }
 }

@@ -1,0 +1,17 @@
+@model TableTennisTracker.Domain.Models.MatchSetResult
+
+@{
+    ViewData["Title"] = "Match Set Result Details";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Set Results", "/MatchSetResults"), ($"Result {Model.Id.ToString().Substring(0, 8)}", "") };
+}
+
+<div class="details-container">
+    <h1>📊 Match Set Result Details</h1>
+
+    <div class="details-grid">
+        <strong>Match Id</strong><span>@Model.MatchId</span>
+        <strong>Set Number</strong><span>@Model.SetNumber</span>
+        <strong>Player One Points</strong><span>@Model.PlayerOnePoints</span>
+        <strong>Player Two Points</strong><span>@Model.PlayerTwoPoints</span>
+    </div>
+</div>

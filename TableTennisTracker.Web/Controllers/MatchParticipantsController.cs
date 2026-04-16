@@ -17,4 +17,15 @@ public class MatchParticipantsController : Controller
         var participants = await _matchParticipantRepository.GetAllAsync();
         return View(participants);
     }
+
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var participant = await _matchParticipantRepository.GetByIdAsync(id);
+        if (participant is null)
+        {
+            return NotFound();
+        }
+
+        return View(participant);
+    }
 }

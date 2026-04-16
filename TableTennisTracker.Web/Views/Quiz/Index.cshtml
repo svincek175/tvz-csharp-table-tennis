@@ -1,0 +1,491 @@
+@{
+    ViewData["Title"] = "Quiz Master";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Quiz Master", "/Quiz") };
+}
+
+<style>
+    .quiz-wrapper {
+        width: 100%;
+    }
+
+    .quiz-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .quiz-header h1 {
+        font-size: 2.5rem;
+        color: #ffed4e;
+        margin-bottom: 8px;
+    }
+
+    .quiz-header p {
+        font-size: 1rem;
+        color: #b0b0ff;
+    }
+
+    .quiz-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        width: 100%;
+    }
+
+    .quiz-main {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .quiz-score-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 260px;
+        flex-shrink: 0;
+    }
+
+    .question-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid;
+        border-radius: 16px;
+        padding: 24px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        backdrop-filter: blur(10px);
+        min-height: 380px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .question-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .question-card.tournament {
+        border-color: #ffb700;
+    }
+
+    .question-card.player {
+        border-color: #00d4d4;
+    }
+
+    .question-card.venue {
+        border-color: #b366ff;
+    }
+
+    .question-card.rules {
+        border-color: #00ff88;
+    }
+
+    .question-card.answered {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    .category-badge {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        width: fit-content;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .category-badge.tournament {
+        background: rgba(255, 183, 0, 0.2);
+        color: #ffb700;
+    }
+
+    .category-badge.player {
+        background: rgba(0, 212, 212, 0.2);
+        color: #00d4d4;
+    }
+
+    .category-badge.venue {
+        background: rgba(179, 102, 255, 0.2);
+        color: #b366ff;
+    }
+
+    .category-badge.rules {
+        background: rgba(0, 255, 136, 0.2);
+        color: #00ff88;
+    }
+
+    .question-text {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 8px 0 20px 0;
+        line-height: 1.4;
+    }
+
+    .answers-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .answer-btn {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
+        padding: 12px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        text-align: left;
+    }
+
+    .answer-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.25);
+        transform: translateX(4px);
+    }
+
+    .answer-btn.correct {
+        background: rgba(0, 255, 136, 0.3);
+        border-color: #00ff88;
+        color: #00ff88;
+    }
+
+    .answer-btn.incorrect {
+        background: rgba(255, 100, 100, 0.3);
+        border-color: #ff6464;
+        color: #ffb3b3;
+    }
+
+    .feedback {
+        margin-top: 12px;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        line-height: 1.3;
+        display: none;
+    }
+
+    .feedback.show {
+        display: block;
+    }
+
+    .feedback.correct {
+        background: rgba(0, 255, 136, 0.15);
+        border: 1px solid #00ff88;
+        color: #80ff80;
+    }
+
+    .feedback.incorrect {
+        background: rgba(255, 100, 100, 0.15);
+        border: 1px solid #ff6464;
+        color: #ffb3b3;
+    }
+
+    .quiz-score-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .score-panel {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(10px);
+    }
+
+    .score-label {
+        font-size: 0.75rem;
+        color: #b0b0b0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+
+    .score-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #ffd700;
+    }
+
+    .score-sub {
+        font-size: 0.85rem;
+        color: #80ff80;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .streak-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background: rgba(255, 140, 0, 0.1);
+        border: 1px solid rgba(255, 140, 0, 0.3);
+        border-radius: 8px;
+        padding: 8px;
+        margin-top: 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #ffed4e;
+    }
+
+    .streak-emoji {
+        font-size: 1.2rem;
+    }
+
+    .completion-panel {
+        background: rgba(0, 255, 136, 0.1);
+        border: 2px solid #00ff88;
+        border-radius: 12px;
+        padding: 32px;
+        text-align: center;
+        display: none;
+        margin-top: 24px;
+    }
+
+    .completion-panel.show {
+        display: block;
+    }
+
+    .completion-panel h2 {
+        font-size: 2rem;
+        margin-bottom: 12px;
+        color: #00ff88;
+    }
+
+    .completion-panel p {
+        font-size: 1rem;
+        color: #b0b0ff;
+        margin: 8px 0;
+    }
+
+    @@media (max-width: 1024px) {
+        .quiz-content {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 640px) {
+        .quiz-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .quiz-main {
+            grid-template-columns: 1fr;
+        }
+
+        .question-card {
+            min-height: auto;
+        }
+    }
+</style>
+
+<div class="index-container">
+    <div class="quiz-wrapper">
+        <div class="quiz-header">
+            <h1>🎯 Quiz Master</h1>
+            <p>Test your knowledge about table tennis tournaments, rules, and players</p>
+        </div>
+
+        <div class="quiz-content">
+            <div class="quiz-main" id="quizMain">
+                <!-- Questions will be loaded here -->
+            </div>
+
+            <div class="quiz-score-sidebar">
+                <div class="score-panel">
+                    <div class="score-label">Score</div>
+                    <div class="score-value" id="scoreDisplay">0</div>
+                    <div class="score-sub" id="totalDisplay">0 / 5</div>
+                    <div class="streak-badge">
+                        <span class="streak-emoji">🔥</span>
+                        <span id="streakDisplay">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="completion-panel" id="completionPanel">
+            <h2>🏆 Quiz Complete!</h2>
+            <p id="finalScoreText"></p>
+            <p id="finalRankText"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            id: "q1",
+            category: "tournament",
+            text: "What is the primary goal of organizing a table tennis tournament?",
+            answers: [
+                { id: "a1", text: "To determine the champion" },
+                { id: "a2", text: "To earn money" },
+                { id: "a3", text: "To have fun with friends" }
+            ],
+            correctId: "a1",
+            explanation: "Determining a champion through competitive play is the primary goal."
+        },
+        {
+            id: "q2",
+            category: "rules",
+            text: "What is the standard winning score in a table tennis set?",
+            answers: [
+                { id: "a4", text: "11 points" },
+                { id: "a5", text: "15 points" },
+                { id: "a6", text: "21 points" }
+            ],
+            correctId: "a4",
+            explanation: "A player must win by at least 2 points with a minimum score of 11."
+        },
+        {
+            id: "q3",
+            category: "player",
+            text: "How many sets are in a best-of-3 table tennis match?",
+            answers: [
+                { id: "a7", text: "First to win 2 sets" },
+                { id: "a8", text: "First to win 3 sets" },
+                { id: "a9", text: "Always exactly 3 sets" }
+            ],
+            correctId: "a7",
+            explanation: "In a best-of-3 match, the first player to win 2 sets wins the match."
+        },
+        {
+            id: "q4",
+            category: "venue",
+            text: "What is the standard height of a table tennis net?",
+            answers: [
+                { id: "a10", text: "15.25 cm" },
+                { id: "a11", text: "20.32 cm" },
+                { id: "a12", text: "25.40 cm" }
+            ],
+            correctId: "a11",
+            explanation: "The net height is exactly 20.32 cm (8 inches) at the edges."
+        },
+        {
+            id: "q5",
+            category: "rules",
+            text: "What happens if the score reaches 10-10 in table tennis?",
+            answers: [
+                { id: "a13", text: "Game continues to 11" },
+                { id: "a14", text: "Deuce - must win by 2 points" },
+                { id: "a15", text: "Match is a draw" }
+            ],
+            correctId: "a14",
+            explanation: "Deuce applies at 10-10, requiring a player to win by 2 points."
+        }
+    ];
+
+    let score = 0;
+    let streak = 0;
+    let answered = 0;
+    const total = quizData.length;
+
+    function initQuiz() {
+        const quizMain = document.getElementById("quizMain");
+        quizMain.innerHTML = "";
+
+        quizData.forEach(question => {
+            const card = document.createElement("div");
+            card.className = `question-card ${question.category}`;
+            card.dataset.questionId = question.id;
+
+            const badge = document.createElement("div");
+            badge.className = `category-badge ${question.category}`;
+            badge.textContent = question.category.toUpperCase();
+
+            const text = document.createElement("div");
+            text.className = "question-text";
+            text.textContent = question.text;
+
+            const answersGrid = document.createElement("div");
+            answersGrid.className = "answers-grid";
+
+            question.answers.forEach(answer => {
+                const btn = document.createElement("button");
+                btn.className = "answer-btn";
+                btn.dataset.answerId = answer.id;
+                btn.textContent = answer.text;
+                btn.onclick = () => submitAnswer(question.id, answer.id, question.correctId, question.explanation, btn, card);
+                answersGrid.appendChild(btn);
+            });
+
+            const feedback = document.createElement("div");
+            feedback.className = "feedback";
+
+            card.appendChild(badge);
+            card.appendChild(text);
+            card.appendChild(answersGrid);
+            card.appendChild(feedback);
+
+            quizMain.appendChild(card);
+        });
+    }
+
+    function submitAnswer(questionId, answerId, correctId, explanation, btnElement, cardElement) {
+        const isCorrect = answerId === correctId;
+        const feedbackDiv = cardElement.querySelector(".feedback");
+
+        const buttons = cardElement.querySelectorAll(".answer-btn");
+        buttons.forEach(btn => btn.onclick = null);
+
+        if (isCorrect) {
+            btnElement.classList.add("correct");
+            score++;
+            streak++;
+            feedbackDiv.className = "feedback show correct";
+            feedbackDiv.innerHTML = `<strong>✓ Correct!</strong> ${explanation}`;
+        } else {
+            btnElement.classList.add("incorrect");
+            streak = 0;
+            feedbackDiv.className = "feedback show incorrect";
+            const correctBtn = Array.from(buttons).find(btn => btn.dataset.answerId === correctId);
+            feedbackDiv.innerHTML = `<strong>✗ Incorrect.</strong> Correct: <strong>"${correctBtn.textContent}"</strong><br>${explanation}`;
+            correctBtn.classList.add("correct");
+        }
+
+        answered++;
+        updateScore();
+        cardElement.classList.add("answered");
+
+        if (answered === total) {
+            setTimeout(showCompletion, 1200);
+        }
+    }
+
+    function updateScore() {
+        document.getElementById("scoreDisplay").textContent = score;
+        document.getElementById("totalDisplay").textContent = `${answered} / ${total}`;
+        document.getElementById("streakDisplay").textContent = streak;
+    }
+
+    function showCompletion() {
+        const panel = document.getElementById("completionPanel");
+        const percentage = Math.round((score / total) * 100);
+        let rank = "Novice";
+        if (percentage >= 80) rank = "Master";
+        else if (percentage >= 60) rank = "Advanced";
+        else if (percentage >= 40) rank = "Intermediate";
+
+        document.getElementById("finalScoreText").textContent = `Final Score: ${score} / ${total} (${percentage}%)`;
+        document.getElementById("finalRankText").textContent = `Rank: 🏅 ${rank}`;
+        panel.classList.add("show");
+    }
+
+    document.addEventListener("DOMContentLoaded", initQuiz);
+</script>

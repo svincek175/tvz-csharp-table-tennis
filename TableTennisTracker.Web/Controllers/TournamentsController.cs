@@ -17,4 +17,15 @@ public class TournamentsController : Controller
         var tournaments = await _tournamentRepository.GetAllAsync();
         return View(tournaments);
     }
+
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var tournament = await _tournamentRepository.GetByIdAsync(id);
+        if (tournament is null)
+        {
+            return NotFound();
+        }
+
+        return View(tournament);
+    }
 }

@@ -17,4 +17,15 @@ public class RegistrationsController : Controller
         var registrations = await _registrationRepository.GetAllAsync();
         return View(registrations);
     }
+
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var registration = await _registrationRepository.GetByIdAsync(id);
+        if (registration is null)
+        {
+            return NotFound();
+        }
+
+        return View(registration);
+    }
 }
