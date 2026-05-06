@@ -5,36 +5,337 @@
     ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Players", "/Players") };
 }
 
-<div class="index-container">
-    <h1>👥 Players</h1>
+<style>
+    .players-header {
+        margin-bottom: 32px;
+    }
 
-    <table class="index-table">
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Date of Birth</th>
-                <th>Country</th>
-                <th>Ranking Points</th>
-                <th>Active</th>
-                <th>Created</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var player in Model)
-            {
-                <tr>
-                    <td>@player.FirstName</td>
-                    <td><strong>@player.LastName</strong></td>
-                    <td>@player.DateOfBirth</td>
-                    <td>@player.CountryCode</td>
-                    <td>@player.CurrentRankingPoints pts</td>
-                    <td>@(player.IsActive ? "✓ Yes" : "✗ No")</td>
-                    <td>@player.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td><a href="/Players/Details/@player.Id">View Details</a></td>
-                </tr>
+    .players-header h1 {
+        font-size: 2.2rem;
+        color: #e0e7ff;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+
+    .players-controls {
+        display: flex;
+        gap: 16px;
+        margin-top: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 200px;
+        padding: 10px 14px;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 8px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+    }
+
+    .search-box::placeholder {
+        color: #6b7280;
+    }
+
+    .players-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .player-row {
+        background: rgba(139, 92, 246, 0.08);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 12px;
+        padding: 18px;
+        display: grid;
+        grid-template-columns: 50px 1fr 1fr 1fr 1fr auto;
+        gap: 16px;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    .player-row:hover {
+        background: rgba(139, 92, 246, 0.12);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateX(4px);
+    }
+
+    .player-rank {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .rank-1 {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: #000;
+    }
+
+    .rank-2 {
+        background: linear-gradient(135deg, #d1d5db, #9ca3af);
+        color: #000;
+    }
+
+    .rank-3 {
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff;
+    }
+
+    .rank-other {
+        background: rgba(139, 92, 246, 0.2);
+        color: #c7d2fe;
+    }
+
+    .player-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .player-name {
+        color: #e0e7ff;
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin-bottom: 4px;
+    }
+
+    .player-meta {
+        color: #8b5cf6;
+        font-size: 0.85rem;
+    }
+
+    .player-country {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #a5b4fc;
+    }
+
+    .player-stats-cell {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stats-label {
+        color: #8b5cf6;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .stats-value {
+        color: #e0e7ff;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .player-points {
+        color: #60a5fa;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-active {
+        background: rgba(34, 197, 94, 0.2);
+        color: #86efac;
+    }
+
+    .status-inactive {
+        background: rgba(107, 114, 128, 0.2);
+        color: #d1d5db;
+    }
+
+    .player-action {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-view {
+        padding: 8px 14px;
+        background: rgba(59, 130, 246, 0.2);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #93c5fd;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .btn-view:hover {
+        background: rgba(59, 130, 246, 0.3);
+        border-color: rgba(59, 130, 246, 0.5);
+        color: #e0e7ff;
+    }
+
+    .player-row-header {
+        display: grid;
+        grid-template-columns: 50px 1fr 1fr 1fr 1fr auto;
+        gap: 16px;
+        padding: 12px 18px;
+        background: rgba(139, 92, 246, 0.1);
+        border-radius: 10px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        color: #c7d2fe;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #8b5cf6;
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 16px;
+    }
+
+    .empty-state-text {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    @@media (max-width: 1024px) {
+        .player-row,
+        .player-row-header {
+            grid-template-columns: 40px 1fr 1fr auto;
+        }
+
+        .player-country {
+            display: none;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .player-row,
+        .player-row-header {
+            grid-template-columns: 40px 1fr auto;
+            gap: 12px;
+        }
+
+        .player-stats-cell:nth-child(3),
+        .player-stats-cell:nth-child(4),
+        .player-row-header > *:nth-child(3),
+        .player-row-header > *:nth-child(4) {
+            display: none;
+        }
+
+        .players-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .player-name {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<div class="index-container">
+    <div class="players-header">
+        <h1>👥 Players</h1>
+        <p style="color: #a5b4fc; margin-top: 8px;">Manage and track all players in the system</p>
+        <div class="players-controls">
+            <input type="text" class="search-box" placeholder="Search players..." id="playerSearch">
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="player-row-header">
+            <div style="text-align: center;">Rank</div>
+            <div>Player Name</div>
+            <div>Country</div>
+            <div>Ranking Points</div>
+            <div style="text-align: center;">Status</div>
+            <div style="text-align: center;">Action</div>
+        </div>
+
+        <div class="players-list">
+            @{
+                var sortedPlayers = Model.OrderByDescending(p => p.CurrentRankingPoints).ToList();
             }
-        </tbody>
-    </table>
+
+            @foreach (var (player, index) in sortedPlayers.Select((p, i) => (p, i)))
+            {
+                var rankClass = "rank-other";
+                if (index == 0) rankClass = "rank-1";
+                else if (index == 1) rankClass = "rank-2";
+                else if (index == 2) rankClass = "rank-3";
+
+                <div class="player-row">
+                    <div class="player-rank @rankClass">
+                        @(index + 1)
+                    </div>
+                    
+                    <div class="player-info">
+                        <div class="player-name">@player.FirstName @player.LastName</div>
+                        <div class="player-meta">Joined @player.CreatedUtc.ToString("MMM dd, yyyy")</div>
+                    </div>
+
+                    <div class="player-country">
+                        @player.CountryCode
+                    </div>
+
+                    <div class="player-stats-cell">
+                        <div class="stats-label">Points</div>
+                        <div class="player-points">@player.CurrentRankingPoints</div>
+                    </div>
+
+                    <div class="player-stats-cell">
+                        <div class="stats-label">Status</div>
+                        <span class="status-badge @(player.IsActive ? "status-active" : "status-inactive")">
+                            @(player.IsActive ? "✓ Active" : "✗ Inactive")
+                        </span>
+                    </div>
+
+                    <div class="player-action">
+                        <a href="/Players/Details/@player.Id" class="btn-view">View Profile</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">👥</div>
+            <div class="empty-state-text">No players yet</div>
+            <p style="color: #6b7280; font-size: 0.95rem;">Add your first player to get started</p>
+        </div>
+    }
 </div>
+
+<script>
+    document.getElementById('playerSearch')?.addEventListener('keyup', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        document.querySelectorAll('.player-row').forEach(row => {
+            const playerName = row.querySelector('.player-name').textContent.toLowerCase();
+            row.style.display = playerName.includes(searchTerm) ? '' : 'none';
+        });
+    });
+</script>
+

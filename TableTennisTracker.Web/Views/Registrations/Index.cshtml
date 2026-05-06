@@ -5,32 +5,250 @@
     ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Registrations", "/Registrations") };
 }
 
-<div class="index-container">
-    <h1>📋 Registrations</h1>
+<style>
+    .registrations-header {
+        margin-bottom: 32px;
+    }
 
-    <table class="index-table">
-        <thead>
-            <tr>
-                <th>Tournament</th>
-                <th>Player</th>
-                <th>Seed #</th>
-                <th>Registered</th>
-                <th>Checked In</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    .registrations-header h1 {
+        font-size: 2.2rem;
+        color: #e0e7ff;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+
+    .registrations-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .registration-row {
+        background: rgba(139, 92, 246, 0.08);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 12px;
+        padding: 18px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 100px 120px 100px auto;
+        gap: 16px;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    .registration-row:hover {
+        background: rgba(139, 92, 246, 0.12);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateX(4px);
+    }
+
+    .registration-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-label {
+        color: #8b5cf6;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .info-value {
+        color: #e0e7ff;
+        font-weight: 600;
+    }
+
+    .seed-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(139, 92, 246, 0.2);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 8px;
+        color: #c7d2fe;
+        font-weight: 700;
+        font-size: 0.95rem;
+        height: 40px;
+    }
+
+    .date-small {
+        color: #a5b4fc;
+        font-size: 0.85rem;
+    }
+
+    .check-in-status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .check-in-badge {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .checked-in {
+        background: rgba(34, 197, 94, 0.2);
+        color: #86efac;
+    }
+
+    .not-checked-in {
+        background: rgba(107, 114, 128, 0.2);
+        color: #d1d5db;
+    }
+
+    .btn-view {
+        padding: 8px 14px;
+        background: rgba(59, 130, 246, 0.2);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #93c5fd;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .btn-view:hover {
+        background: rgba(59, 130, 246, 0.3);
+        border-color: rgba(59, 130, 246, 0.5);
+        color: #e0e7ff;
+    }
+
+    .registration-row-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr 100px 120px 100px auto;
+        gap: 16px;
+        padding: 12px 18px;
+        background: rgba(139, 92, 246, 0.1);
+        border-radius: 10px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        color: #c7d2fe;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #8b5cf6;
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 16px;
+    }
+
+    .empty-state-text {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    @@media (max-width: 1024px) {
+        .registration-row,
+        .registration-row-header {
+            grid-template-columns: 1fr 1fr auto auto;
+        }
+
+        .date-small,
+        .registration-row > *:nth-child(4),
+        .registration-row-header > *:nth-child(4) {
+            display: none;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .registration-row,
+        .registration-row-header {
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+        }
+
+        .registration-row > *:nth-child(2),
+        .registration-row > *:nth-child(3),
+        .registration-row > *:nth-child(5),
+        .registration-row-header > *:nth-child(2),
+        .registration-row-header > *:nth-child(3),
+        .registration-row-header > *:nth-child(5) {
+            display: none;
+        }
+
+        .registrations-header h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<div class="index-container">
+    <div class="registrations-header">
+        <h1>📋 Registrations</h1>
+        <p style="color: #a5b4fc; margin-top: 8px;">Manage tournament registrations and check-ins</p>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="registration-row-header">
+            <div>Tournament</div>
+            <div>Player</div>
+            <div>Seed #</div>
+            <div>Registered</div>
+            <div style="text-align: center;">Status</div>
+            <div style="text-align: center;">Action</div>
+        </div>
+
+        <div class="registrations-list">
             @foreach (var registration in Model)
             {
-                <tr>
-                    <td>@registration.Tournament?.Name</td>
-                    <td><strong>@(registration.Player is not null ? $"{registration.Player.FirstName} {registration.Player.LastName}" : "—")</strong></td>
-                    <td>@registration.SeedNumber</td>
-                    <td>@registration.RegisteredUtc.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>@(registration.IsCheckedIn ? "✓ Yes" : "✗ No")</td>
-                    <td><a href="/Registrations/Details/@registration.Id">View Details</a></td>
-                </tr>
+                <div class="registration-row">
+                    <div class="registration-info">
+                        <div class="info-label">Tournament</div>
+                        <div class="info-value">@(registration.Tournament?.Name ?? "N/A")</div>
+                    </div>
+
+                    <div class="registration-info">
+                        <div class="info-label">Player</div>
+                        <div class="info-value">
+                            @(registration.Player is not null ? $"{registration.Player.FirstName} {registration.Player.LastName}" : "—")
+                        </div>
+                    </div>
+
+                    <div class="seed-badge">
+                        #@registration.SeedNumber
+                    </div>
+
+                    <div class="registration-info">
+                        <div class="info-label">Registered</div>
+                        <div class="date-small">@registration.RegisteredUtc.ToString("MMM dd, HH:mm")</div>
+                    </div>
+
+                    <div class="check-in-status">
+                        <span class="check-in-badge @(registration.IsCheckedIn ? "checked-in" : "not-checked-in")">
+                            @(registration.IsCheckedIn ? "✓ Checked In" : "✗ Pending")
+                        </span>
+                    </div>
+
+                    <div>
+                        <a href="/Registrations/Details/@registration.Id" class="btn-view">View</a>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <div class="empty-state-text">No registrations yet</div>
+            <p style="color: #6b7280; font-size: 0.95rem;">Player registrations will appear here</p>
+        </div>
+    }
 </div>

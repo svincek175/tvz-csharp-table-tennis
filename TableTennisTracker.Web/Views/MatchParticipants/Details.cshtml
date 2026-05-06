@@ -6,12 +6,75 @@
 }
 
 <div class="details-container">
-    <h1>👫 Match Participant Details</h1>
+    <h1><span class="icon-label">👫</span>Match Participant</h1>
 
-    <div class="details-grid">
-        <strong>Match Id</strong><span>@Model.MatchId</span>
-        <strong>Player</strong><span>@(Model.Player is null ? "—" : $"{Model.Player.FirstName} {Model.Player.LastName}")</span>
-        <strong>Slot</strong><span>@Model.Slot</span>
-        <strong>Sets Won</strong><span>@Model.ScoreSetsWon</span>
+    <!-- Header Stats -->
+    <div class="details-header">
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-item-label">🎯 Slot</div>
+                <div class="stat-item-value">@Model.Slot</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">🏆 Sets Won</div>
+                <div class="stat-item-value highlight">@Model.ScoreSetsWon</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">Participant ID</div>
+                <div class="stat-item-value">@Model.Id.ToString().Substring(0, 8)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Participant Information -->
+    <div class="details-section">
+        <div class="details-section-title">👤 Participant Information</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Player</span>
+                <span class="detail-card-value">
+                    @if (Model.Player is null)
+                    {
+                        <span class="badge badge-warning">Not Assigned</span>
+                    }
+                    else
+                    {
+                        <a href="/Players/Details/@Model.Player.Id">@Model.Player.FirstName @Model.Player.LastName</a>
+                    }
+                </span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Match ID</span>
+                <span class="detail-card-value">@Model.MatchId.ToString().Substring(0, 8)</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Participant Slot</span>
+                <span class="detail-card-value highlight">@Model.Slot</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance -->
+    <div class="details-section">
+        <div class="details-section-title">📊 Match Performance</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Sets Won</span>
+                <span class="detail-card-value highlight">@Model.ScoreSetsWon</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Status</span>
+                <span class="detail-card-value">
+                    @if (Model.ScoreSetsWon > 0)
+                    {
+                        <span class="badge badge-success">✓ Winning</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-info">Competitive</span>
+                    }
+                </span>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "hooks": {
+    "userPromptSubmitted": [
+      {
+        "type": "command",
+        "bash": "./scripts/log-prompt.sh",
+        "cwd": "."
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "./scripts/route-agent.sh",
+        "cwd": "."
+      }
+    ],
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "echo \"SESSION STARTED $(date)\" >> ai_logs.txt",
+        "cwd": "."
+      }
+    ]
+  }
+}

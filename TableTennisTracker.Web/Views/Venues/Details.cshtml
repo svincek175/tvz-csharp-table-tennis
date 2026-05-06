@@ -6,16 +6,95 @@
 }
 
 <div class="details-container">
-    <h1>📍 Venue Details</h1>
+    <h1><span class="icon-label">📍</span>@Model.Name</h1>
 
-    <div class="details-grid">
-        <strong>Name</strong><span>@Model.Name</span>
-        <strong>City</strong><span>@Model.City</span>
-        <strong>Country Code</strong><span>@Model.CountryCode</span>
-        <strong>Address</strong><span>@Model.AddressLine</span>
-        <strong>Number of Tables</strong><span>@Model.NumberOfTables</span>
-        <strong>Capacity</strong><span>@Model.Capacity</span>
-        <strong>Time Zone</strong><span>@Model.TimeZoneId</span>
-        <strong>Tournaments Hosted</strong><span>@Model.Tournaments.Count</span>
+    <!-- Header Stats -->
+    <div class="details-header">
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-item-label">📍 Location</div>
+                <div class="stat-item-value">@Model.City, @Model.CountryCode</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">🏓 Tables</div>
+                <div class="stat-item-value">@Model.NumberOfTables</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">👥 Capacity</div>
+                <div class="stat-item-value">@Model.Capacity</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">🏆 Tournaments</div>
+                <div class="stat-item-value">@Model.Tournaments.Count</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Venue Information -->
+    <div class="details-section">
+        <div class="details-section-title">🏢 Venue Information</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Venue Name</span>
+                <span class="detail-card-value">@Model.Name</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">City</span>
+                <span class="detail-card-value">@Model.City</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Country</span>
+                <span class="detail-card-value">@Model.CountryCode</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Time Zone</span>
+                <span class="detail-card-value">@Model.TimeZoneId</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Address & Location -->
+    <div class="details-section">
+        <div class="details-section-title">🗺️ Location Details</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Address</span>
+                <span class="detail-card-value">@Model.AddressLine</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Country Code</span>
+                <span class="detail-card-value highlight">@Model.CountryCode</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Facilities -->
+    <div class="details-section">
+        <div class="details-section-title">🏓 Facilities</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Number of Tables</span>
+                <span class="detail-card-value highlight">@Model.NumberOfTables</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Total Capacity</span>
+                <span class="detail-card-value highlight">@Model.Capacity Persons</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Tables per Area</span>
+                <span class="detail-card-value">@(Model.Capacity > 0 ? Math.Round((double)Model.Capacity / Model.NumberOfTables, 1) : 0) per table</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hosted Tournaments -->
+    <div class="details-section">
+        <div class="details-section-title">🏆 Hosted Tournaments</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Total Tournaments</span>
+                <span class="detail-card-value highlight">@Model.Tournaments.Count</span>
+            </div>
+        </div>
     </div>
 </div>
