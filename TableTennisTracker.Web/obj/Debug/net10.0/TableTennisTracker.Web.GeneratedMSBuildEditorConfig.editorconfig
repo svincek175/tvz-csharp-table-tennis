@@ -26,20 +26,44 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Matches/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWF0Y2hlcy9EZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Matches/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWF0Y2hlcy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/MatchParticipants/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWF0Y2hQYXJ0aWNpcGFudHMvRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/MatchParticipants/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWF0Y2hQYXJ0aWNpcGFudHMvSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/MatchSetResults/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWF0Y2hTZXRSZXN1bHRzL0RldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/MatchSetResults/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWF0Y2hTZXRSZXN1bHRzL0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Players/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGxheWVycy9EZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Players/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGxheWVycy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Quiz/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUXVpei9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Registrations/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmVnaXN0cmF0aW9ucy9EZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Registrations/Index.cshtml]
@@ -50,12 +74,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Tournaments/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVG91cm5hbWVudHMvRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Tournaments/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVG91cm5hbWVudHMvSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Venues/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudWVzL0RldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/Venues/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudWVzL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/Views/_ViewStart.cshtml]
