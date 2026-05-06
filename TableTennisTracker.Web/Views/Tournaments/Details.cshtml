@@ -6,19 +6,106 @@
 }
 
 <div class="details-container">
-    <h1>🏆 Tournament Details</h1>
+    <h1><span class="icon-label">🏆</span>@Model.Name</h1>
 
-    <div class="details-grid">
-        <strong>Name</strong><span>@Model.Name</span>
-        <strong>Season</strong><span>@Model.SeasonLabel</span>
-        <strong>Start</strong><span>@Model.StartUtc.ToString("yyyy-MM-dd HH:mm")</span>
-        <strong>End</strong><span>@Model.EndUtc.ToString("yyyy-MM-dd HH:mm")</span>
-        <strong>Max Players</strong><span>@Model.MaxPlayers</span>
-        <strong>Best Of Sets</strong><span>@Model.BestOfSets</span>
-        <strong>Organizer</strong><span>@Model.OrganizerName</span>
-        <strong>Ranking Event</strong><span>@(Model.IsRankingEvent ? "Yes" : "No")</span>
-        <strong>Venue</strong><span>@Model.Venue?.Name</span>
-        <strong>Registrations</strong><span>@Model.Registrations.Count</span>
-        <strong>Matches</strong><span>@Model.Matches.Count</span>
+    <!-- Header Stats -->
+    <div class="details-header">
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-item-label">📅 Season</div>
+                <div class="stat-item-value">@Model.SeasonLabel</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">👥 Registrations</div>
+                <div class="stat-item-value">@Model.Registrations.Count / @Model.MaxPlayers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">⚔️ Matches</div>
+                <div class="stat-item-value">@Model.Matches.Count</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">Best Of</div>
+                <div class="stat-item-value">@Model.BestOfSets</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournament Info -->
+    <div class="details-section">
+        <div class="details-section-title">📋 Tournament Information</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Tournament Name</span>
+                <span class="detail-card-value">@Model.Name</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Season</span>
+                <span class="detail-card-value">@Model.SeasonLabel</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Organizer</span>
+                <span class="detail-card-value">@Model.OrganizerName</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Max Players</span>
+                <span class="detail-card-value highlight">@Model.MaxPlayers</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule -->
+    <div class="details-section">
+        <div class="details-section-title">📅 Schedule & Venue</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Start Date</span>
+                <span class="detail-card-value">@Model.StartUtc.ToString("MMMM dd, yyyy HH:mm")</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">End Date</span>
+                <span class="detail-card-value">@Model.EndUtc.ToString("MMMM dd, yyyy HH:mm")</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Venue</span>
+                <span class="detail-card-value">
+                    @if (Model.Venue is not null)
+                    {
+                        <a href="/Venues/Details/@Model.Venue.Id">@Model.Venue.Name</a>
+                    }
+                    else
+                    {
+                        <span>—</span>
+                    }
+                </span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Best Of Sets</span>
+                <span class="detail-card-value highlight">@Model.BestOfSets</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status -->
+    <div class="details-section">
+        <div class="details-section-title">🎯 Tournament Status</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Ranking Event</span>
+                <span class="detail-card-value">
+                    @if (Model.IsRankingEvent)
+                    {
+                        <span class="badge badge-info">⭐ Yes - Ranking Points Awarded</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-warning">Friendly Event</span>
+                    }
+                </span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Capacity</span>
+                <span class="detail-card-value">@Model.Registrations.Count / @Model.MaxPlayers Players</span>
+            </div>
+        </div>
     </div>
 </div>

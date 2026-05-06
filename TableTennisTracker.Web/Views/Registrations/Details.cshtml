@@ -6,13 +6,106 @@
 }
 
 <div class="details-container">
-    <h1>📋 Registration Details</h1>
+    <h1><span class="icon-label">📋</span>Tournament Registration</h1>
 
-    <div class="details-grid">
-        <strong>Tournament</strong><span>@Model.Tournament?.Name</span>
-        <strong>Player</strong><span>@(Model.Player is null ? "—" : $"{Model.Player.FirstName} {Model.Player.LastName}")</span>
-        <strong>Seed Number</strong><span>@Model.SeedNumber</span>
-        <strong>Registered At</strong><span>@Model.RegisteredUtc.ToString("yyyy-MM-dd HH:mm")</span>
-        <strong>Checked In</strong><span>@(Model.IsCheckedIn ? "Yes" : "No")</span>
+    <!-- Header Stats -->
+    <div class="details-header">
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-item-label">🌱 Seed Number</div>
+                <div class="stat-item-value highlight">@Model.SeedNumber</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">✅ Check-In Status</div>
+                <div class="stat-item-value">
+                    @if (Model.IsCheckedIn)
+                    {
+                        <span class="badge badge-success">✓ Checked In</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-warning">⏳ Pending</span>
+                    }
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">Registration ID</div>
+                <div class="stat-item-value">@Model.Id.ToString().Substring(0, 8)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Information -->
+    <div class="details-section">
+        <div class="details-section-title">📋 Registration Details</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Tournament</span>
+                <span class="detail-card-value">
+                    @if (Model.Tournament is not null)
+                    {
+                        <a href="/Tournaments/Details/@Model.Tournament.Id">@Model.Tournament.Name</a>
+                    }
+                    else
+                    {
+                        <span>—</span>
+                    }
+                </span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Registered Player</span>
+                <span class="detail-card-value">
+                    @if (Model.Player is null)
+                    {
+                        <span class="badge badge-danger">No Player Assigned</span>
+                    }
+                    else
+                    {
+                        <a href="/Players/Details/@Model.Player.Id">@Model.Player.FirstName @Model.Player.LastName</a>
+                    }
+                </span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Seed Number</span>
+                <span class="detail-card-value highlight">@Model.SeedNumber</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check-in Status -->
+    <div class="details-section">
+        <div class="details-section-title">✅ Check-In Information</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Registration Date</span>
+                <span class="detail-card-value">@Model.RegisteredUtc.ToString("MMMM dd, yyyy HH:mm")</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Check-In Status</span>
+                <span class="detail-card-value">
+                    @if (Model.IsCheckedIn)
+                    {
+                        <span class="badge badge-success">✓ Checked In</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-warning">⏳ Awaiting Check-In</span>
+                    }
+                </span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Tournament Status</span>
+                <span class="detail-card-value">
+                    @if (Model.Tournament is not null)
+                    {
+                        <span class="badge badge-info">@Model.Tournament.SeasonLabel</span>
+                    }
+                    else
+                    {
+                        <span>—</span>
+                    }
+                </span>
+            </div>
+        </div>
     </div>
 </div>

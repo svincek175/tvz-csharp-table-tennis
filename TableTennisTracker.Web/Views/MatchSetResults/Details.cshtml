@@ -6,12 +6,124 @@
 }
 
 <div class="details-container">
-    <h1>📊 Match Set Result Details</h1>
+    <h1><span class="icon-label">📊</span>Match Set Result</h1>
 
-    <div class="details-grid">
-        <strong>Match Id</strong><span>@Model.MatchId</span>
-        <strong>Set Number</strong><span>@Model.SetNumber</span>
-        <strong>Player One Points</strong><span>@Model.PlayerOnePoints</span>
-        <strong>Player Two Points</strong><span>@Model.PlayerTwoPoints</span>
+    <!-- Header Stats -->
+    <div class="details-header">
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-item-label">🎾 Set Number</div>
+                <div class="stat-item-value highlight">@Model.SetNumber</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">👤 Player One Points</div>
+                <div class="stat-item-value highlight">@Model.PlayerOnePoints</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">👤 Player Two Points</div>
+                <div class="stat-item-value highlight">@Model.PlayerTwoPoints</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">🏆 Set Winner</div>
+                <div class="stat-item-value">
+                    @if (Model.PlayerOnePoints > Model.PlayerTwoPoints)
+                    {
+                        <span class="badge badge-success">Player One</span>
+                    }
+                    else if (Model.PlayerTwoPoints > Model.PlayerOnePoints)
+                    {
+                        <span class="badge badge-success">Player Two</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-warning">Tied</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Set Information -->
+    <div class="details-section">
+        <div class="details-section-title">📋 Set Details</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Set Number</span>
+                <span class="detail-card-value highlight">@Model.SetNumber</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Match ID</span>
+                <span class="detail-card-value">@Model.MatchId.ToString().Substring(0, 8)</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Result ID</span>
+                <span class="detail-card-value">@Model.Id.ToString().Substring(0, 8)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Score Breakdown -->
+    <div class="details-section">
+        <div class="details-section-title">🎯 Score Details</div>
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-item-label">🎾 Player One Score</div>
+                <div class="stat-item-value highlight">
+                    @if (Model.PlayerOnePoints > Model.PlayerTwoPoints)
+                    {
+                        <span style="color: #10b981;">@Model.PlayerOnePoints ✓</span>
+                    }
+                    else
+                    {
+                        @Model.PlayerOnePoints
+                    }
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">vs</div>
+                <div class="stat-item-value">—</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">🎾 Player Two Score</div>
+                <div class="stat-item-value highlight">
+                    @if (Model.PlayerTwoPoints > Model.PlayerOnePoints)
+                    {
+                        <span style="color: #10b981;">@Model.PlayerTwoPoints ✓</span>
+                    }
+                    else
+                    {
+                        @Model.PlayerTwoPoints
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Set Result Summary -->
+    <div class="details-section">
+        <div class="details-section-title">🏆 Set Result</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Match Result ID</span>
+                <span class="detail-card-value">@Model.Id</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Set Outcome</span>
+                <span class="detail-card-value">
+                    @{
+                        var margin = Math.Abs(Model.PlayerOnePoints - Model.PlayerTwoPoints);
+                        var winner = Model.PlayerOnePoints > Model.PlayerTwoPoints ? "Player One" : (Model.PlayerTwoPoints > Model.PlayerOnePoints ? "Player Two" : "Tie");
+                    }
+                    @if (winner != "Tie")
+                    {
+                        <span class="badge badge-success">@winner wins by @margin</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-warning">Set Tied</span>
+                    }
+                </span>
+            </div>
+        </div>
     </div>
 </div>

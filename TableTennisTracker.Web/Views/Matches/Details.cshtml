@@ -6,19 +6,148 @@
 }
 
 <div class="details-container">
-    <h1>🎾 Match Details</h1>
+    <h1><span class="icon-label">🎾</span>Match @Model.Id.ToString().Substring(0, 8)</h1>
 
-    <div class="details-grid">
-        <strong>Tournament</strong><span>@Model.Tournament?.Name</span>
-        <strong>Round</strong><span>@Model.RoundNumber</span>
-        <strong>Table</strong><span>@Model.TableNumber</span>
-        <strong>Scheduled Start</strong><span>@Model.ScheduledStartUtc.ToString("yyyy-MM-dd HH:mm")</span>
-        <strong>Actual Start</strong><span>@(Model.ActualStartUtc?.ToString("yyyy-MM-dd HH:mm") ?? "—")</span>
-        <strong>Completed</strong><span>@(Model.CompletedUtc?.ToString("yyyy-MM-dd HH:mm") ?? "—")</span>
-        <strong>Status</strong><span>@Model.Status</span>
-        <strong>Best Of Sets</strong><span>@Model.BestOfSets</span>
-        <strong>Winner</strong><span>@(Model.WinnerPlayer is null ? "—" : $"{Model.WinnerPlayer.FirstName} {Model.WinnerPlayer.LastName}")</span>
-        <strong>Participants</strong><span>@Model.Participants.Count</span>
-        <strong>Set Results</strong><span>@Model.SetResults.Count</span>
+    <!-- Header Stats -->
+    <div class="details-header">
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-item-label">📊 Status</div>
+                <div class="stat-item-value">
+                    @if (Model.Status.ToString() == "Completed")
+                    {
+                        <span class="badge badge-success">✓ @Model.Status</span>
+                    }
+                    else if (Model.Status.ToString() == "InProgress")
+                    {
+                        <span class="badge badge-warning">⏳ In Progress</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-info">🔔 @Model.Status</span>
+                    }
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">Round</div>
+                <div class="stat-item-value">@Model.RoundNumber</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">Table</div>
+                <div class="stat-item-value">@Model.TableNumber</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item-label">Best Of</div>
+                <div class="stat-item-value">@Model.BestOfSets</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournament Info -->
+    <div class="details-section">
+        <div class="details-section-title">🏆 Tournament Information</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Tournament</span>
+                <span class="detail-card-value">
+                    @if (Model.Tournament is not null)
+                    {
+                        <a href="/Tournaments/Details/@Model.Tournament.Id">@Model.Tournament.Name</a>
+                    }
+                    else
+                    {
+                        <span>—</span>
+                    }
+                </span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Round Number</span>
+                <span class="detail-card-value highlight">@Model.RoundNumber</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Table Number</span>
+                <span class="detail-card-value highlight">@Model.TableNumber</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Best Of Sets</span>
+                <span class="detail-card-value">@Model.BestOfSets</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="details-section">
+        <div class="details-section-title">📅 Match Timeline</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Scheduled Start</span>
+                <span class="detail-card-value">@Model.ScheduledStartUtc.ToString("MMMM dd, yyyy HH:mm")</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Actual Start</span>
+                <span class="detail-card-value">@(Model.ActualStartUtc?.ToString("MMMM dd, yyyy HH:mm") ?? "Not Started")</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Completed</span>
+                <span class="detail-card-value">@(Model.CompletedUtc?.ToString("MMMM dd, yyyy HH:mm") ?? "Ongoing")</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Duration</span>
+                <span class="detail-card-value">
+                    @{
+                        if (Model.ActualStartUtc.HasValue && Model.CompletedUtc.HasValue)
+                        {
+                            var duration = Model.CompletedUtc.Value - Model.ActualStartUtc.Value;
+                            @duration.ToString("hh\\:mm\\:ss")
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
+                    }
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="details-section">
+        <div class="details-section-title">🎯 Match Results</div>
+        <div class="details-grid">
+            <div class="detail-card">
+                <span class="detail-card-label">Winner</span>
+                <span class="detail-card-value">
+                    @if (Model.WinnerPlayer is null)
+                    {
+                        <span class="badge badge-warning">Pending</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-success">⭐ @Model.WinnerPlayer.FirstName @Model.WinnerPlayer.LastName</span>
+                    }
+                </span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Participants</span>
+                <span class="detail-card-value highlight">@Model.Participants.Count</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Set Results</span>
+                <span class="detail-card-value highlight">@Model.SetResults.Count</span>
+            </div>
+            <div class="detail-card">
+                <span class="detail-card-label">Match Status</span>
+                <span class="detail-card-value">
+                    @if (Model.Status.ToString() == "Completed")
+                    {
+                        <span class="badge badge-success">Completed</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-info">@Model.Status</span>
+                    }
+                </span>
+            </div>
+        </div>
     </div>
 </div>

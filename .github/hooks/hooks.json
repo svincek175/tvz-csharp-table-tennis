@@ -1,17 +1,25 @@
 {
+  "version": 1,
   "hooks": {
-    "UserPromptSubmit": [
+    "userPromptSubmitted": [
       {
         "type": "command",
-        "command": "powershell.exe -ExecutionPolicy Bypass -File \".github\\hooks\\log-agent-input.ps1\" -EventName UserPromptSubmit",
-        "timeout": 15
+        "bash": "./scripts/log-prompt.sh",
+        "cwd": "."
       }
     ],
-    "PreToolUse": [
+    "preToolUse": [
       {
         "type": "command",
-        "command": "powershell.exe -ExecutionPolicy Bypass -File \".github\\hooks\\log-agent-input.ps1\" -EventName PreToolUse",
-        "timeout": 15
+        "bash": "./scripts/route-agent.sh",
+        "cwd": "."
+      }
+    ],
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "echo \"SESSION STARTED $(date)\" >> ai_logs.txt",
+        "cwd": "."
       }
     ]
   }

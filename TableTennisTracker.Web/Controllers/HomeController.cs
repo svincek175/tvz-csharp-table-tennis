@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TableTennisTracker.Web.Infrastructure.Repositories;
+using TableTennisTracker.Domain.Models;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace TableTennisTracker.Web.Controllers;
 
@@ -34,10 +36,10 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var tournaments = await _tournamentRepository.GetAllAsync();
+        var tournaments = (await _tournamentRepository.GetAllAsync()).OrderByDescending(t => t.StartUtc).ToList();
         var venues = await _venueRepository.GetAllAsync();
-        var players = await _playerRepository.GetAllAsync();
-        var matches = await _matchRepository.GetAllAsync();
+        var players = (await _playerRepository.GetAllAsync()).OrderByDescending(p => p.CurrentRankingPoints).ToList();
+        var matches = (await _matchRepository.GetAllAsync()).OrderByDescending(m => m.ScheduledStartUtc).ToList();
         var registrations = await _registrationRepository.GetAllAsync();
         var matchParticipants = await _matchParticipantRepository.GetAllAsync();
         var matchSetResults = await _matchSetResultRepository.GetAllAsync();
@@ -53,7 +55,10 @@ public class HomeController : Controller
             MatchSetResultCount = matchSetResults.Count(),
             LatestTournament = tournaments.FirstOrDefault()?.Name,
             LatestVenue = venues.FirstOrDefault()?.Name,
-            LatestPlayer = tournaments.FirstOrDefault() != null ? $"{tournaments.First().Name}" : null
+            LatestPlayer = players.FirstOrDefault() != null ? $"{players.First().FirstName} {players.First().LastName}" : null,
+            UpcomingTournaments = tournaments.Take(5).ToList(),
+            TopPlayers = players.Take(5).ToList(),
+            RecentMatches = matches.Take(5).ToList()
         };
 
         return View(dashboard);
@@ -72,4 +77,7 @@ public class DashboardViewModel
     public string LatestTournament { get; set; }
     public string LatestVenue { get; set; }
     public string LatestPlayer { get; set; }
+    public List<Tournament> UpcomingTournaments { get; set; } = new();
+    public List<Player> TopPlayers { get; set; } = new();
+    public List<Match> RecentMatches { get; set; } = new();
 }
