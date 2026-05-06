@@ -4,22 +4,17 @@
     "userPromptSubmitted": [
       {
         "type": "command",
-        "bash": "./scripts/log-prompt.sh",
-        "cwd": "."
+        "bash": "./.github/hooks/log-agent-input.sh userPromptSubmitted",
+        "cwd": ".",
+        "timeoutSec": 15
       }
     ],
     "preToolUse": [
       {
         "type": "command",
-        "bash": "./scripts/route-agent.sh",
-        "cwd": "."
-      }
-    ],
-    "sessionStart": [
-      {
-        "type": "command",
-        "bash": "echo \"SESSION STARTED $(date)\" >> ai_logs.txt",
-        "cwd": "."
+        "bash": "./.github/hooks/log-agent-input.sh preToolUse",
+        "cwd": ".",
+        "timeoutSec": 15
       }
     ]
   }

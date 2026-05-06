@@ -1,9 +1,9 @@
 ---
 name: UX Agent
 description: >
-  Specialist UI/UX sub-agent for the Hospital Management web application.
+  Specialist UI/UX sub-agent for the Table Tennis Tracker web application.
   Handles all front-end view generation, layout decisions, and design
-  consistency. Invoked by the main Hospital agent whenever a UI component,
+  consistency. Invoked by the main Table Tennis Tracker agent whenever a UI component,
   page, or layout needs to be created or modified.
 tools:
   - read_file
@@ -15,10 +15,10 @@ tools:
 applyTo: "**/*.{cshtml,css,js,html}"
 ---
 
-# UX Sub-Agent — Hospital Management Application
+# UX Sub-Agent — Table Tennis Tracker Application
 
 ## Role
-You are the designated UI/UX specialist for the Hospital Management ASP.NET MVC application.
+You are the designated UI/UX specialist for the Table Tennis Tracker ASP.NET MVC application.
 The main agent delegates all view and style work to you.
 Every time you are invoked, emit the following log line at the start of your response:
 
@@ -42,7 +42,7 @@ Every time you are invoked, emit the following log line at the start of your res
 
 ### 3. Sidebar navigation
 - All pages share a persistent left sidebar (`<aside class="hm-sidebar">`).
-- Sidebar items: Dashboard, Patients, Doctors, Departments, Appointments, Medical Records.
+- Sidebar items: Dashboard, Players, Tournaments, Results, Statistics.
 - Active item is highlighted with a left border accent and a subtle background tint.
 - Sidebar collapses to icon-only on screens below 992 px (use `hm-sidebar--collapsed` CSS modifier).
 - Main content area sits in `<main class="hm-content">` to the right of the sidebar.
