@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TableTennisTracker.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+391deb894d4fbe5fbc3287765fac4163d3a0cf00")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a28d50eb427cff24e1583dc4027e76d3f5b2c5a")]
 [assembly: System.Reflection.AssemblyProductAttribute("TableTennisTracker.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TableTennisTracker.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
