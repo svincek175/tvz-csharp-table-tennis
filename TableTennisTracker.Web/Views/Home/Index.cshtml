@@ -706,27 +706,38 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Sample data rendering for demo - this would come from the model in production
-        const upcomingTournaments = [];
-        const topPlayers = [];
-        const recentMatches = [];
-
         // Render upcoming tournaments
         const tournamentsContainer = document.getElementById('upcomingTournaments');
-        if (upcomingTournaments.length > 0) {
-            tournamentsContainer.innerHTML = upcomingTournaments.map(t => `
-                <div class="tournament-item">
-                    <div class="tournament-item-info">
-                        <div class="tournament-item-name">${t.name || 'Tournament'}</div>
-                        <div class="tournament-item-date">${new Date(t.startUtc).toLocaleDateString()}</div>
+        const tournaments = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.UpcomingTournaments.Select(t => new { 
+            name = t.Name, 
+            startUtc = t.StartUtc,
+            id = t.Id
+        })));
+        
+        if (tournaments.length > 0) {
+            tournamentsContainer.innerHTML = tournaments.map(t => `
+                <a href="/Tournaments/Details/${t.id}" style="text-decoration: none; color: inherit;">
+                    <div class="tournament-item">
+                        <div class="tournament-item-info">
+                            <div class="tournament-item-name">${t.name || 'Tournament'}</div>
+                            <div class="tournament-item-date">${new Date(t.startUtc).toLocaleDateString()}</div>
+                        </div>
+                        <div class="tournament-item-status">Upcoming</div>
                     </div>
-                    <div class="tournament-item-status">Upcoming</div>
-                </div>
+                </a>
             `).join('');
         }
 
         // Render leaderboard
         const leaderboardContainer = document.getElementById('leaderboard');
+        const topPlayers = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopPlayers.Select(p => new { 
+            firstName = p.FirstName,
+            lastName = p.LastName,
+            countryCode = p.CountryCode,
+            currentRankingPoints = p.CurrentRankingPoints,
+            id = p.Id
+        })));
+        
         if (topPlayers.length > 0) {
             leaderboardContainer.innerHTML = topPlayers.map((p, i) => {
                 let rankClass = 'other';
@@ -735,80 +746,52 @@
                 else if (i === 2) rankClass = 'rank-3';
                 
                 return `
-                    <div class="leaderboard-item">
-                        <div class="rank-badge ${rankClass}">${i + 1}</div>
-                        <div class="player-info">
-                            <div class="player-name">${p.firstName || ''} ${p.lastName || 'Player'}</div>
-                            <div class="player-stats">${p.countryCode || 'Unknown'}</div>
+                    <a href="/Players/Details/${p.id}" style="text-decoration: none; color: inherit;">
+                        <div class="leaderboard-item">
+                            <div class="rank-badge ${rankClass}">${i + 1}</div>
+                            <div class="player-info">
+                                <div class="player-name">${p.firstName || ''} ${p.lastName || 'Player'}</div>
+                                <div class="player-stats">${p.countryCode || 'Unknown'}</div>
+                            </div>
+                            <div class="player-points">${p.currentRankingPoints || 0}</div>
                         </div>
-                        <div class="player-points">${p.currentRankingPoints || 0}</div>
-                    </div>
+                    </a>
                 `;
             }).join('');
         }
 
         // Render recent matches
         const recentMatchesContainer = document.getElementById('recentMatches');
+        const recentMatches = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.RecentMatches.Select(m => new { 
+            id = m.Id,
+            tournament = m.Tournament != null ? m.Tournament.Name : "Tournament",
+            scheduledStartUtc = m.ScheduledStartUtc,
+            status = m.Status.ToString(),
+            participant1 = m.Participants.FirstOrDefault() != null && m.Participants.FirstOrDefault().Player != null ? m.Participants.FirstOrDefault().Player.FirstName + " " + m.Participants.FirstOrDefault().Player.LastName : "Player 1",
+            participant2 = m.Participants.Skip(1).FirstOrDefault() != null && m.Participants.Skip(1).FirstOrDefault().Player != null ? m.Participants.Skip(1).FirstOrDefault().Player.FirstName + " " + m.Participants.Skip(1).FirstOrDefault().Player.LastName : "Player 2"
+        })));
+        
         if (recentMatches.length > 0) {
             recentMatchesContainer.innerHTML = recentMatches.map(m => `
-                <div class="match-card">
-                    <div class="match-players">
-                        <div class="player-matchup" style="flex: 1;">
-                            <span class="player-name-match">${m.player1 || 'Player 1'}</span>
+                <a href="/Matches/Details/${m.id}" style="text-decoration: none; color: inherit;">
+                    <div class="match-card">
+                        <div class="match-players">
+                            <div class="player-matchup" style="flex: 1;">
+                                <span class="player-name-match">${m.participant1}</span>
+                            </div>
+                            <div class="vs-badge">vs</div>
+                            <div class="player-matchup" style="flex: 1; justify-content: flex-end;">
+                                <span class="player-name-match">${m.participant2}</span>
+                            </div>
                         </div>
-                        <div class="vs-badge">vs</div>
-                        <div class="player-matchup" style="flex: 1; justify-content: flex-end;">
-                            <span class="player-name-match">${m.player2 || 'Player 2'}</span>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="match-tournament">${m.tournament}</span>
+                            <span class="match-score">${m.status}</span>
                         </div>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span class="match-tournament">${m.tournament || 'Tournament'}</span>
-                        <span class="match-score">${m.score || 'Pending'}</span>
-                    </div>
-                </div>
+                </a>
             `).join('');
         }
     });
 </script>
-
-            <div class="entity-label">Games & Scoring</div>
-            <div class="entity-latest">Total: <span class="entity-latest-value">@Model.MatchCount</span></div>
-        </div>
-    </a>
-
-    <a href="/Registrations" class="entity-card registrations">
-        <div class="entity-card-header">
-            <div class="entity-icon">📋</div>
-            <div class="entity-count">@Model.RegistrationCount</div>
-        </div>
-        <div>
-            <div class="entity-name">Registrations</div>
-            <div class="entity-label">Tournament Sign-ups</div>
-            <div class="entity-latest">Total: <span class="entity-latest-value">@Model.RegistrationCount</span></div>
-        </div>
-    </a>
-
-    <a href="/MatchParticipants" class="entity-card matchparticipants">
-        <div class="entity-card-header">
-            <div class="entity-icon">🎯</div>
-            <div class="entity-count">@Model.MatchParticipantCount</div>
-        </div>
-        <div>
-            <div class="entity-name">Participants</div>
-            <div class="entity-label">Match Assignments</div>
-            <div class="entity-latest">Total: <span class="entity-latest-value">@Model.MatchParticipantCount</span></div>
-        </div>
-    </a>
-
-    <a href="/MatchSetResults" class="entity-card matchsetresults">
-        <div class="entity-card-header">
-            <div class="entity-icon">📊</div>
-            <div class="entity-count">@Model.MatchSetResultCount</div>
-        </div>
-        <div>
-            <div class="entity-name">Set Results</div>
-            <div class="entity-label">Score Tracking</div>
-            <div class="entity-latest">Total: <span class="entity-latest-value">@Model.MatchSetResultCount</span></div>
-        </div>
-    </a>
 </div>
