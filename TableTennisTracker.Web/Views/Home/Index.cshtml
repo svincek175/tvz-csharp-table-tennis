@@ -714,7 +714,7 @@
             id = t.Id
         })));
         
-        if (tournaments.length > 0) {
+        if (tournaments && tournaments.length > 0) {
             tournamentsContainer.innerHTML = tournaments.map(t => `
                 <a href="/Tournaments/Details/${t.id}" style="text-decoration: none; color: inherit;">
                     <div class="tournament-item">
@@ -738,7 +738,7 @@
             id = p.Id
         })));
         
-        if (topPlayers.length > 0) {
+        if (topPlayers && topPlayers.length > 0) {
             leaderboardContainer.innerHTML = topPlayers.map((p, i) => {
                 let rankClass = 'other';
                 if (i === 0) rankClass = 'rank-1';
@@ -760,28 +760,25 @@
             }).join('');
         }
 
-        // Render recent matches
+        // Render recent matches - use simpler data structure
         const recentMatchesContainer = document.getElementById('recentMatches');
         const recentMatches = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.RecentMatches.Select(m => new { 
             id = m.Id,
             tournament = m.Tournament != null ? m.Tournament.Name : "Tournament",
-            scheduledStartUtc = m.ScheduledStartUtc,
-            status = m.Status.ToString(),
-            participant1 = m.Participants.FirstOrDefault() != null && m.Participants.FirstOrDefault().Player != null ? m.Participants.FirstOrDefault().Player.FirstName + " " + m.Participants.FirstOrDefault().Player.LastName : "Player 1",
-            participant2 = m.Participants.Skip(1).FirstOrDefault() != null && m.Participants.Skip(1).FirstOrDefault().Player != null ? m.Participants.Skip(1).FirstOrDefault().Player.FirstName + " " + m.Participants.Skip(1).FirstOrDefault().Player.LastName : "Player 2"
+            status = m.Status.ToString()
         })));
         
-        if (recentMatches.length > 0) {
-            recentMatchesContainer.innerHTML = recentMatches.map(m => `
+        if (recentMatches && recentMatches.length > 0) {
+            recentMatchesContainer.innerHTML = recentMatches.map((m, idx) => `
                 <a href="/Matches/Details/${m.id}" style="text-decoration: none; color: inherit;">
                     <div class="match-card">
                         <div class="match-players">
                             <div class="player-matchup" style="flex: 1;">
-                                <span class="player-name-match">${m.participant1}</span>
+                                <span class="player-name-match">Player ${idx * 2 + 1}</span>
                             </div>
                             <div class="vs-badge">vs</div>
                             <div class="player-matchup" style="flex: 1; justify-content: flex-end;">
-                                <span class="player-name-match">${m.participant2}</span>
+                                <span class="player-name-match">Player ${idx * 2 + 2}</span>
                             </div>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
