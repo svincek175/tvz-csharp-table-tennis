@@ -4,16 +4,22 @@
     "userPromptSubmitted": [
       {
         "type": "command",
-        "bash": "./.github/hooks/log-agent-input.sh userPromptSubmitted",
-        "cwd": ".",
+        "bash": "./route-ui-to-ux-agent.sh",
+        "cwd": ".github/hooks",
+        "timeoutSec": 15
+      },
+      {
+        "type": "command",
+        "bash": "./log-agent-input.sh",
+        "cwd": ".github/hooks",
         "timeoutSec": 15
       }
     ],
     "preToolUse": [
       {
         "type": "command",
-        "bash": "./.github/hooks/log-agent-input.sh preToolUse",
-        "cwd": ".",
+        "bash": "./log-agent-input.sh",
+        "cwd": ".github/hooks",
         "timeoutSec": 15
       }
     ]

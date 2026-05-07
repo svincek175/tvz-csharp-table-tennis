@@ -1,20 +1,33 @@
+using Microsoft.EntityFrameworkCore;
 using TableTennisTracker.Web.Infrastructure;
 using TableTennisTracker.Web.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+builder.Services.AddDbContext<TableTennisTrackerDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
 builder.Services.AddControllersWithViews();
 
-// Register mock repositories
-builder.Services.AddScoped<ITournamentRepository, MockTournamentRepository>();
-builder.Services.AddScoped<IVenueRepository, MockVenueRepository>();
-builder.Services.AddScoped<IPlayerRepository, MockPlayerRepository>();
-builder.Services.AddScoped<IMatchRepository, MockMatchRepository>();
-builder.Services.AddScoped<IRegistrationRepository, MockRegistrationRepository>();
-builder.Services.AddScoped<IMatchParticipantRepository, MockMatchParticipantRepository>();
-builder.Services.AddScoped<IMatchSetResultRepository, MockMatchSetResultRepository>();
+builder.Services.AddScoped<ITournamentRepository, EfTournamentRepository>();
+builder.Services.AddScoped<IVenueRepository, EfVenueRepository>();
+builder.Services.AddScoped<IPlayerRepository, EfPlayerRepository>();
+builder.Services.AddScoped<IMatchRepository, EfMatchRepository>();
+builder.Services.AddScoped<IRegistrationRepository, EfRegistrationRepository>();
+builder.Services.AddScoped<IMatchParticipantRepository, EfMatchParticipantRepository>();
+builder.Services.AddScoped<IMatchSetResultRepository, EfMatchSetResultRepository>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<TableTennisTrackerDbContext>();
+    await dbContext.Database.MigrateAsync();
+    await DatabaseSeeder.SeedAsync(dbContext);
+}
 
 if (!app.Environment.IsDevelopment())
 {

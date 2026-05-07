@@ -1,7 +1,0 @@
-=========================
-EVENT: userPromptSubmitted
-TIME: Wed May  6 23:50:27 CEST 2026
-INPUT:
-test prompt
-=========================
-

@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Registration Details";
-    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Registrations", "/Registrations"), ($"Registration {Model.Id.ToString().Substring(0, 8)}", "") };
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Registrations", "/registrations/current"), ($"Registration {Model.Id.ToString().Substring(0, 8)}", "") };
 }
 
 <div class="details-container">
@@ -61,7 +61,7 @@
                     }
                     else
                     {
-                        <a href="/Players/Details/@Model.Player.Id">@Model.Player.FirstName @Model.Player.LastName</a>
+                        <a href="/players/profile/@Model.Player.Id">@Model.Player.FirstName @Model.Player.LastName</a>
                     }
                 </span>
             </div>

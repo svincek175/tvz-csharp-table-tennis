@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Registrations";
-    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Registrations", "/Registrations") };
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Registrations", "/registrations/current") };
 }
 
 <style>
@@ -237,7 +237,7 @@
                     </div>
 
                     <div>
-                        <a href="/Registrations/Details/@registration.Id" class="btn-view">View</a>
+                        <a href="/registrations/info/@registration.Id" class="btn-view">View</a>
                     </div>
                 </div>
             }

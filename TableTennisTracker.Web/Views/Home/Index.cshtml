@@ -667,7 +667,7 @@
                     </div>
                 </a>
 
-                <a href="/Players" class="entity-card">
+                <a href="/players/list" class="entity-card">
                     <div class="entity-card-header">
                         <div class="entity-icon">👥</div>
                         <div class="entity-count">@Model.PlayerCount</div>
@@ -678,7 +678,7 @@
                     </div>
                 </a>
 
-                <a href="/Matches" class="entity-card">
+                <a href="/matches/all" class="entity-card">
                     <div class="entity-card-header">
                         <div class="entity-icon">⚔️</div>
                         <div class="entity-count">@Model.MatchCount</div>
@@ -689,7 +689,7 @@
                     </div>
                 </a>
 
-                <a href="/Registrations" class="entity-card">
+                <a href="/registrations/current" class="entity-card">
                     <div class="entity-card-header">
                         <div class="entity-icon">📋</div>
                         <div class="entity-count">@Model.RegistrationCount</div>
@@ -746,7 +746,7 @@
                 else if (i === 2) rankClass = 'rank-3';
                 
                 return `
-                    <a href="/Players/Details/${p.id}" style="text-decoration: none; color: inherit;">
+                    <a href="/players/profile/${p.id}" style="text-decoration: none; color: inherit;">
                         <div class="leaderboard-item">
                             <div class="rank-badge ${rankClass}">${i + 1}</div>
                             <div class="player-info">
@@ -770,7 +770,7 @@
         
         if (recentMatches && recentMatches.length > 0) {
             recentMatchesContainer.innerHTML = recentMatches.map((m, idx) => `
-                <a href="/Matches/Details/${m.id}" style="text-decoration: none; color: inherit;">
+                <a href="/matches/view/${m.id}" style="text-decoration: none; color: inherit;">
                     <div class="match-card">
                         <div class="match-players">
                             <div class="player-matchup" style="flex: 1;">

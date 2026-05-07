@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Console/TableTennisTracker.Console.csproj": {}
+    "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Console/TableTennisTracker.Console.csproj": {}
   },
   "projects": {
-    "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Console/TableTennisTracker.Console.csproj": {
+    "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Console/TableTennisTracker.Console.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Console/TableTennisTracker.Console.csproj",
+        "projectUniqueName": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Console/TableTennisTracker.Console.csproj",
         "projectName": "TableTennisTracker.Console",
-        "projectPath": "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Console/TableTennisTracker.Console.csproj",
+        "projectPath": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Console/TableTennisTracker.Console.csproj",
         "packagesPath": "/Users/simon.vincek/.nuget/packages/",
-        "outputPath": "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Console/obj/",
+        "outputPath": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Console/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/simon.vincek/.nuget/NuGet/NuGet.Config"
@@ -27,8 +27,8 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj": {
-                "projectPath": "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj"
+              "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj": {
+                "projectPath": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj"
               }
             }
           }
@@ -342,14 +342,14 @@
         }
       }
     },
-    "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj": {
+    "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj",
+        "projectUniqueName": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj",
         "projectName": "TableTennisTracker.Domain",
-        "projectPath": "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj",
+        "projectPath": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/TableTennisTracker.Domain.csproj",
         "packagesPath": "/Users/simon.vincek/.nuget/packages/",
-        "outputPath": "/Users/simon.vincek/tvz-csharp-table-tennis.worktrees/copilot-worktree-2026-05-06T17-11-33/TableTennisTracker.Domain/obj/",
+        "outputPath": "/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/simon.vincek/.nuget/NuGet/NuGet.Config"

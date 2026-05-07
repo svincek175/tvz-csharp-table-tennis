@@ -1,10 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TableTennisTracker.Domain.Enums;
 
 namespace TableTennisTracker.Domain.Models;
 
 public class Match
 {
+    [Key]
     public Guid Id { get; set; }
+
     public Guid TournamentId { get; set; }
     public int RoundNumber { get; set; }
     public int TableNumber { get; set; }
@@ -15,9 +19,12 @@ public class Match
     public int BestOfSets { get; set; }
     public Guid? WinnerPlayerId { get; set; }
 
-    public Tournament? Tournament { get; set; }
-    public Player? WinnerPlayer { get; set; }
+    [ForeignKey(nameof(TournamentId))]
+    public virtual Tournament? Tournament { get; set; }
 
-    public ICollection<MatchParticipant> Participants { get; set; } = new List<MatchParticipant>();
-    public ICollection<MatchSetResult> SetResults { get; set; } = new List<MatchSetResult>();
+    [ForeignKey(nameof(WinnerPlayerId))]
+    public virtual Player? WinnerPlayer { get; set; }
+
+    public virtual ICollection<MatchParticipant> Participants { get; set; } = new List<MatchParticipant>();
+    public virtual ICollection<MatchSetResult> SetResults { get; set; } = new List<MatchSetResult>();
 }

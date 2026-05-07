@@ -5,30 +5,290 @@
     ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Participants", "/MatchParticipants") };
 }
 
-<div class="index-container">
-    <h1>👫 Match Participants</h1>
+<style>
+    .participants-header {
+        margin-bottom: 32px;
+    }
 
-    <table class="index-table">
-        <thead>
-            <tr>
-                <th>Match ID</th>
-                <th>Player</th>
-                <th>Slot</th>
-                <th>Sets Won</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var participant in Model)
+    .participants-header h1 {
+        font-size: 2.2rem;
+        color: #e0e7ff;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+
+    .participants-controls {
+        display: flex;
+        gap: 16px;
+        margin-top: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 200px;
+        padding: 10px 14px;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 8px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+    }
+
+    .search-box::placeholder {
+        color: #6b7280;
+    }
+
+    .participants-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .participant-row {
+        background: rgba(139, 92, 246, 0.08);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 12px;
+        padding: 18px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr auto;
+        gap: 16px;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    .participant-row:hover {
+        background: rgba(139, 92, 246, 0.12);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateX(4px);
+    }
+
+    .match-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .match-id-label {
+        color: #8b5cf6;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .match-id-value {
+        color: #e0e7ff;
+        font-weight: 700;
+        font-size: 1.05rem;
+    }
+
+    .player-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .player-name {
+        color: #e0e7ff;
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin-bottom: 4px;
+    }
+
+    .player-meta {
+        color: #8b5cf6;
+        font-size: 0.85rem;
+    }
+
+    .stat-cell {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-label {
+        color: #8b5cf6;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .stat-value {
+        color: #e0e7ff;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .slot-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: rgba(59, 130, 246, 0.2);
+        color: #93c5fd;
+        font-weight: 700;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .participant-row-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr auto;
+        gap: 16px;
+        padding: 12px 18px;
+        background: rgba(139, 92, 246, 0.1);
+        border-radius: 10px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        color: #c7d2fe;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-view {
+        padding: 8px 14px;
+        background: rgba(59, 130, 246, 0.2);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #93c5fd;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .btn-view:hover {
+        background: rgba(59, 130, 246, 0.3);
+        border-color: rgba(59, 130, 246, 0.5);
+        color: #e0e7ff;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #8b5cf6;
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 16px;
+    }
+
+    .empty-state-text {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    @@media (max-width: 1024px) {
+        .participant-row,
+        .participant-row-header {
+            grid-template-columns: 1fr 1fr auto;
+        }
+
+        .participant-row > div:nth-child(3),
+        .participant-row > div:nth-child(4),
+        .participant-row-header > *:nth-child(3),
+        .participant-row-header > *:nth-child(4) {
+            display: none;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .participant-row,
+        .participant-row-header {
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+        }
+
+        .participant-row > div:nth-child(2),
+        .participant-row > div:nth-child(3),
+        .participant-row > div:nth-child(4),
+        .participant-row-header > *:nth-child(2),
+        .participant-row-header > *:nth-child(3),
+        .participant-row-header > *:nth-child(4) {
+            display: none;
+        }
+
+        .participants-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .player-name {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<div class="index-container">
+    <div class="participants-header">
+        <h1>👫 Match Participants</h1>
+        <p style="color: #a5b4fc; margin-top: 8px;">Track all participants across matches</p>
+        <div class="participants-controls">
+            <input type="text" class="search-box" placeholder="Search by player name..." id="participantSearch">
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="participant-row-header">
+            <div>Match ID</div>
+            <div>Player Name</div>
+            <div>Slot</div>
+            <div>Sets Won</div>
+            <div style="text-align: center;">Action</div>
+        </div>
+
+        <div class="participants-list">
+            @foreach (var participant in Model.OrderBy(p => p.MatchId).ThenBy(p => p.Slot))
             {
-                <tr>
-                    <td>@participant.MatchId</td>
-                    <td><strong>@(participant.Player is not null ? $"{participant.Player.FirstName} {participant.Player.LastName}" : "—")</strong></td>
-                    <td>@participant.Slot</td>
-                    <td>@participant.ScoreSetsWon</td>
-                    <td><a href="/MatchParticipants/Details/@participant.Id">View Details</a></td>
-                </tr>
+                <div class="participant-row">
+                    <div class="match-info">
+                        <div class="match-id-label">Match ID</div>
+                        <div class="match-id-value">#@participant.MatchId</div>
+                    </div>
+
+                    <div class="player-info">
+                        <div class="player-name">@(participant.Player is not null ? $"{participant.Player.FirstName} {participant.Player.LastName}" : "—")</div>
+                        <div class="player-meta">@(participant.Player?.CountryCode ?? "—")</div>
+                    </div>
+
+                    <div class="stat-cell">
+                        <div class="stat-label">Slot</div>
+                        <div class="slot-badge">@participant.Slot</div>
+                    </div>
+
+                    <div class="stat-cell">
+                        <div class="stat-label">Sets Won</div>
+                        <div class="stat-value">@participant.ScoreSetsWon</div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <a href="/MatchParticipants/Details/@participant.Id" class="btn-view">View</a>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">👫</div>
+            <div class="empty-state-text">No participants yet</div>
+            <p style="color: #6b7280; font-size: 0.95rem;">Participants will appear as they join matches</p>
+        </div>
+    }
 </div>
+
+<script>
+    document.getElementById('participantSearch')?.addEventListener('keyup', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        document.querySelectorAll('.participant-row').forEach(row => {
+            const playerName = row.querySelector('.player-name').textContent.toLowerCase();
+            row.style.display = playerName.includes(searchTerm) ? '' : 'none';
+        });
+    });
+</script>
