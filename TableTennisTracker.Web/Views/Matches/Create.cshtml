@@ -1,0 +1,165 @@
+@model TableTennisTracker.Domain.Models.Match
+@using TableTennisTracker.Web.ViewModels
+
+@{
+    ViewData["Title"] = "Add New Match";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Matches", "/matches/all"), ("Create", "") };
+}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-header {
+        margin-bottom: 32px;
+    }
+
+    .form-header h1 {
+        color: #e0e7ff;
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 36px;
+    }
+
+    .form-label {
+        display: block;
+        color: #e0e7ff;
+        margin-bottom: 10px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .form-control,
+    .form-select {
+        width: 100%;
+        padding: 13px 14px;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: rgba(139, 92, 246, 0.5);
+        background: rgba(139, 92, 246, 0.15);
+    }
+
+    .form-control::placeholder {
+        color: #6b7280;
+    }
+
+    .validation-error {
+        color: #fca5a5;
+        font-size: 0.8rem;
+        margin-top: 6px;
+        margin-bottom: 16px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 36px;
+    }
+
+    .btn-submit {
+        background: rgba(139, 92, 246, 0.9);
+        color: white;
+        padding: 11px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: background 0.3s;
+    }
+
+    .btn-submit:hover {
+        background: rgba(139, 92, 246, 1);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #9ca3af;
+        padding: 11px 24px;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel:hover {
+        color: #e0e7ff;
+        border-color: rgba(139, 92, 246, 0.4);
+    }
+</style>
+
+<div class="form-container">
+    <div class="form-header">
+        <h1>⚔️ Add New Match</h1>
+    </div>
+
+    <form method="post" action="/matches/create">
+        @Html.AntiForgeryToken()
+
+        @await Html.PartialAsync("_AutocompleteLookup", new AutocompleteLookupViewModel
+        {
+            InputId = nameof(Model.TournamentId),
+            InputName = nameof(Model.TournamentId),
+            Label = "Tournament *",
+            Placeholder = "Search tournaments...",
+            LookupUrl = "/tournaments/lookup"
+        })
+        @Html.ValidationMessageFor(m => m.TournamentId, "", new { @class = "validation-error" })
+
+        <div class="form-group">
+            <label class="form-label">Round Number</label>
+            @Html.TextBoxFor(m => m.RoundNumber, new { @class = "form-control", type = "number", @placeholder = "1" })
+            @Html.ValidationMessageFor(m => m.RoundNumber, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Table Number</label>
+            @Html.TextBoxFor(m => m.TableNumber, new { @class = "form-control", type = "number", @placeholder = "1" })
+            @Html.ValidationMessageFor(m => m.TableNumber, "", new { @class = "validation-error" })
+        </div>
+
+        @await Html.PartialAsync("_DatePicker", new DatePickerViewModel
+        {
+            FieldId = nameof(Model.ScheduledStartUtc),
+            FieldName = nameof(Model.ScheduledStartUtc),
+            Label = "Scheduled Start (UTC)",
+            Value = Model.ScheduledStartUtc == default ? null : Model.ScheduledStartUtc.ToString("yyyy-MM-ddTHH:mm"),
+            EnableTime = true
+        })
+        @Html.ValidationMessageFor(m => m.ScheduledStartUtc, "", new { @class = "validation-error" })
+
+        <div class="form-group">
+            <label class="form-label">Status</label>
+            @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @placeholder = "Scheduled" })
+            @Html.ValidationMessageFor(m => m.Status, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Best of (Sets)</label>
+            @Html.TextBoxFor(m => m.BestOfSets, new { @class = "form-control", type = "number", @placeholder = "3" })
+            @Html.ValidationMessageFor(m => m.BestOfSets, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Create Match</button>
+            <a href="/matches/all" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>

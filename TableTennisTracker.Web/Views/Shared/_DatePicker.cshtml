@@ -1,0 +1,37 @@
+@model TableTennisTracker.Web.ViewModels.DatePickerViewModel
+
+<div class="form-group datepicker-control">
+    <label class="form-label">@Model.Label</label>
+    <div class="datepicker-wrap" id="@(Model.FieldId)_wrap">
+        <input type="hidden"
+               id="@Model.FieldId"
+               name="@Model.FieldName"
+               value="@Model.Value"
+               data-input />
+        <button type="button" class="datepicker-btn" data-toggle aria-label="Open calendar" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<script>
+(function () {
+    var wrap = document.getElementById('@(Model.FieldId)_wrap');
+    flatpickr(wrap, {
+        wrap: true,
+        locale: 'hr',
+        altInput: true,
+        altFormat: '@(Model.EnableTime ? "j. n. Y., H:i" : "j. n. Y.")',
+        dateFormat: '@(Model.EnableTime ? "Y-m-dTH:i" : "Y-m-d")',
+        enableTime: @(Model.EnableTime ? "true" : "false"),
+        time_24hr: true,
+        allowInput: true,
+        altInputClass: 'form-control datepicker-alt-input'
+    });
+})();
+</script>

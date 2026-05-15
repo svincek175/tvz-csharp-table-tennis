@@ -1,0 +1,23 @@
+@model TableTennisTracker.Web.ViewModels.AutocompleteLookupViewModel
+
+<div class="form-group autocomplete-control" data-autocomplete-control data-lookup-url="@Model.LookupUrl">
+    <label class="form-label" for="@Model.InputId">@Model.Label</label>
+    <input type="hidden" id="@Model.InputId" name="@Model.InputName" value="@Model.SelectedValue" data-selected-text="@Model.SelectedText" data-required-message="@($"{Model.Label} is required")" data-validate-guid="true" />
+    <div class="autocomplete-shell">
+        <input type="text"
+               id="@($"{Model.InputId}_search")"
+               class="form-control autocomplete-input"
+               placeholder="@Model.Placeholder"
+               value="@Model.SelectedText"
+               autocomplete="off"
+               aria-autocomplete="list"
+               aria-expanded="false"
+               aria-controls="@($"{Model.InputId}_results")" />
+        <button type="button" class="autocomplete-toggle" aria-label="Show suggestions" tabindex="0">▾</button>
+        <div id="@($"{Model.InputId}_results")" class="autocomplete-results" hidden></div>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Model.HelpText))
+    {
+        <div class="autocomplete-help">@Model.HelpText</div>
+    }
+</div>

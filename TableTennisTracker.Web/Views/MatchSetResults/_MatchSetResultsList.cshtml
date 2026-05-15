@@ -1,0 +1,27 @@
+@model IEnumerable<TableTennisTracker.Domain.Models.MatchSetResult>
+
+@if (Model == null || !Model.Any())
+{
+    <div style="text-align: center; padding: 40px; color: #9ca3af;">
+        <p>No match set results found.</p>
+    </div>
+}
+else
+{
+    @foreach (var result in Model)
+    {
+        <div class="setresult-row">
+            <div class="setresult-info">
+                <div class="setresult-name">@result.Match?.Tournament?.Name</div>
+                <div class="setresult-meta">
+                    Set @result.SetNumber | Player 1: @result.PlayerOnePoints pts | Player 2: @result.PlayerTwoPoints pts
+                </div>
+            </div>
+            <div class="setresult-actions">
+                <a href="/match-set-results/view/@result.Id" class="btn-small btn-view">View</a>
+                <a href="/match-set-results/edit/@result.Id" class="btn-small btn-edit">Edit</a>
+                <a href="/match-set-results/delete/@result.Id" class="btn-small btn-delete">Delete</a>
+            </div>
+        </div>
+    }
+}

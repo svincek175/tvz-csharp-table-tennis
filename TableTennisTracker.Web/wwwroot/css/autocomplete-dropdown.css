@@ -1,0 +1,115 @@
+[data-autocomplete-control] {
+    position: relative;
+}
+
+[data-autocomplete-control][data-open="true"] {
+    z-index: 50;
+}
+
+.autocomplete-shell {
+    display: flex;
+    align-items: stretch;
+    position: relative;
+}
+
+.autocomplete-input {
+    flex: 1 1 0;
+    min-width: 0;
+    border-radius: 6px 0 0 6px !important;
+    border-right: none !important;
+}
+
+.autocomplete-toggle {
+    flex-shrink: 0;
+    align-self: stretch;
+    width: 44px;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    color: #a5b4fc;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.autocomplete-toggle:focus {
+    outline: 2px solid rgba(99, 102, 241, 0.3);
+    outline-offset: -2px;
+}
+
+.autocomplete-toggle:hover {
+    background: rgba(99, 102, 241, 0.16);
+    color: #c4b5fd;
+}
+
+.autocomplete-results {
+    position: absolute;
+    z-index: 9999;
+    left: 0;
+    right: 0;
+    margin-top: 8px;
+    background: #111827;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.45);
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+/* Ensure any leftover decorative pseudo-element is hidden so only the real toggle is visible */
+.autocomplete-shell::after {
+    content: none !important;
+}
+
+/* ensure dropdown appears over other content when inside stacked contexts */
+.autocomplete-results {
+    z-index: 9999;
+}
+
+.autocomplete-option {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border: 0;
+    background: transparent;
+    color: #e0e7ff;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.autocomplete-option:hover,
+.autocomplete-option.is-active {
+    background: rgba(139, 92, 246, 0.18);
+}
+
+.autocomplete-option strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.autocomplete-option span {
+    color: #a5b4fc;
+    font-size: 0.82rem;
+}
+
+.autocomplete-empty,
+.autocomplete-loading {
+    padding: 12px 14px;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.autocomplete-help {
+    margin-top: 6px;
+    color: #9ca3af;
+    font-size: 0.8rem;
+}

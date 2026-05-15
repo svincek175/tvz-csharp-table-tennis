@@ -169,3 +169,10 @@
 /Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/bin/Debug/net10.0/runtimes/win/lib/net8.0/System.Windows.Extensions.dll
 /Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/bin/Debug/net10.0/Npgsql.dll
 /Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/bin/Debug/net10.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/bin/Debug/net10.0/TableTennisTracker.Web.staticwebassets.runtime.json
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/compressed/5lww4f6ygg-{0}-55tf74zs0t-55tf74zs0t.gz
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/compressed/db8xmj3hav-{0}-5s29u49gp1-5s29u49gp1.gz
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/compressed/sgvzxxlb47-{0}-bhecjmdbva-bhecjmdbva.gz
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/compressed/0gj9slnagm-{0}-w095z9alqg-w095z9alqg.gz
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/compressed/kq6gi2qwck-{0}-acnyov51eq-acnyov51eq.gz
+/Users/simon.vincek/tvz-csharp-table-tennis/TableTennisTracker.Web/obj/Debug/net10.0/compressed/c8e74axkc4-{0}-3l45s6h4ll-3l45s6h4ll.gz

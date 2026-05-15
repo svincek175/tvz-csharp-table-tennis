@@ -1,0 +1,133 @@
+@model TableTennisTracker.Domain.Models.Registration
+
+@{
+    ViewData["Title"] = "Delete Registration";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Registrations", "/registrations/current"), ("Delete", "") };
+}
+
+<style>
+    .delete-container {
+        max-width: 500px;
+        margin: 0 auto;
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: 8px;
+        padding: 32px;
+        text-align: center;
+    }
+
+    .delete-icon {
+        font-size: 3rem;
+        margin-bottom: 16px;
+    }
+
+    .delete-title {
+        color: #fca5a5;
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+
+    .delete-message {
+        color: #9ca3af;
+        margin-bottom: 24px;
+        line-height: 1.5;
+    }
+
+    .registration-info {
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.15);
+        border-radius: 6px;
+        padding: 16px;
+        margin-bottom: 24px;
+        text-align: left;
+    }
+
+    .registration-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+    }
+
+    .registration-info-label {
+        color: #9ca3af;
+        font-weight: 500;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .btn-danger {
+        background: rgba(239, 68, 68, 0.8);
+        color: white;
+        padding: 11px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: background 0.3s;
+    }
+
+    .btn-danger:hover {
+        background: rgba(239, 68, 68, 1);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #9ca3af;
+        padding: 11px 24px;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel:hover {
+        color: #e0e7ff;
+        border-color: rgba(139, 92, 246, 0.4);
+    }
+</style>
+
+<div class="delete-container">
+    <div class="delete-icon">⚠️</div>
+    <h1 class="delete-title">Delete Registration?</h1>
+    <p class="delete-message">
+        This action cannot be undone. This will permanently delete the registration.
+    </p>
+
+    <div class="registration-info">
+        <div class="registration-info-row">
+            <span class="registration-info-label">Player:</span>
+            <span>@Model.Player?.FirstName @Model.Player?.LastName</span>
+        </div>
+        <div class="registration-info-row">
+            <span class="registration-info-label">Tournament:</span>
+            <span>@Model.Tournament?.Name</span>
+        </div>
+        <div class="registration-info-row">
+            <span class="registration-info-label">Seed:</span>
+            <span>@(Model.SeedNumber == 0 ? "None" : Model.SeedNumber)</span>
+        </div>
+        <div class="registration-info-row">
+            <span class="registration-info-label">Status:</span>
+            <span>@(Model.IsCheckedIn ? "Checked In" : "Not Checked In")</span>
+        </div>
+    </div>
+
+    <form method="post" action="/registrations/delete/@Model.Id" style="display: inline;">
+        @Html.AntiForgeryToken()
+        <div class="form-actions">
+            <button type="submit" class="btn-danger">Delete Registration</button>
+            <a href="/registrations/info/@Model.Id" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>

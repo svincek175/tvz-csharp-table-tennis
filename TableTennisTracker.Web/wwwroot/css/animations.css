@@ -1,0 +1,384 @@
+/**
+ * Advanced CSS Animations for Table Tennis Tracker
+ * Demonstrates sophisticated animation patterns and easing functions
+ */
+
+/* ============================================================
+   Keyframe Animations
+   ============================================================ */
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInError {
+    0% {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes shakeField {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-3px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(3px);
+    }
+}
+
+@keyframes focusPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.5);
+    }
+    70% {
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes checkmark {
+    0% {
+        stroke-dashoffset: 100;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* ============================================================
+   Form Group Animations
+   ============================================================ */
+
+.form-group {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.form-group-animated {
+    opacity: 1;
+}
+
+/* Hover effect on form groups - subtle only */
+.form-group:hover {
+    /* Keep this subtle to not interfere with interactions */
+}
+
+/* ============================================================
+   Input Focus Animations
+   ============================================================ */
+
+.form-control,
+.form-select {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+
+.form-control:focus,
+.form-select:focus {
+    animation: focusPulse 0.4s ease-out;
+    transform: translateY(-2px);
+}
+
+/* Animated underline on focus */
+.form-control::after,
+.form-select::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: rgba(139, 92, 246, 0.6);
+    transition: width 0.3s ease;
+}
+
+.form-control:focus::after,
+.form-select:focus::after {
+    width: 100%;
+}
+
+/* ============================================================
+   Validation Error Animations
+   ============================================================ */
+
+.validation-error {
+    animation: slideInError 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 1;
+    transform-origin: left center;
+}
+
+.validation-error::before {
+    content: '⚠️ ';
+    display: inline-block;
+    animation: bounce 0.4s ease;
+}
+
+/* ============================================================
+   Button Animations
+   ============================================================ */
+
+.btn-submit,
+.btn-cancel,
+button[type="submit"],
+button[type="button"] {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-submit:hover,
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+}
+
+.btn-submit:active,
+button[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(139, 92, 246, 0.2);
+}
+
+.btn-cancel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(156, 163, 175, 0.2);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+/* Ripple effect container */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: ripple 0.6s ease-out;
+    pointer-events: none;
+}
+
+/* Button submitting state */
+.button-submitting {
+    pointer-events: none;
+}
+
+/* ============================================================
+   Autocomplete Animations
+   ============================================================ */
+
+.autocomplete-control {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.autocomplete-results {
+    animation: fadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-result-item],
+.autocomplete-option {
+    transition: all 0.2s ease;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+[data-result-item]:hover,
+.autocomplete-option:hover {
+    background: rgba(139, 92, 246, 0.15);
+    transform: translateX(4px);
+}
+
+/* ============================================================
+   Form Header Animations
+   ============================================================ */
+
+.form-header {
+    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.form-header h1 {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.form-header h1:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 8px rgba(139, 92, 246, 0.2);
+}
+
+/* ============================================================
+   Success Message Animations
+   ============================================================ */
+
+.success-message {
+    animation: slideInRight 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================
+   Scroll Reveal Animations
+   ============================================================ */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================================
+   Form Container Entrance
+   ============================================================ */
+
+.form-container {
+    animation: fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================
+   Checkbox and Radio Animations
+   ============================================================ */
+
+.form-checkbox input[type="checkbox"] {
+    transition: all 0.3s ease;
+}
+
+.form-checkbox input[type="checkbox"]:checked {
+    animation: bounce 0.3s ease;
+}
+
+.form-checkbox input[type="checkbox"]:hover {
+    transform: scale(1.1);
+}
+
+/* ============================================================
+   Loading States
+   ============================================================ */
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    animation: spin 0.8s linear infinite;
+}
+
+/* ============================================================
+   Transitions for Form Actions
+   ============================================================ */
+
+.form-actions {
+    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+}
+
+/* ============================================================
+   Accessibility: Reduced Motion Support
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .form-group:hover {
+        transform: none;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        animation: none;
+        transform: none;
+    }
+
+    button:hover {
+        transform: none;
+    }
+}

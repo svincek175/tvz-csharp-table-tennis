@@ -1,0 +1,27 @@
+@model IEnumerable<TableTennisTracker.Domain.Models.Venue>
+
+@if (Model == null || !Model.Any())
+{
+    <div style="text-align: center; padding: 40px; color: #9ca3af;">
+        <p>No venues found.</p>
+    </div>
+}
+else
+{
+    @foreach (var venue in Model)
+    {
+        <div class="venue-row">
+            <div class="venue-info">
+                <div class="venue-name">@venue.Name</div>
+                <div class="venue-meta">
+                    📍 @venue.City, @venue.CountryCode | 🏓 @venue.NumberOfTables tables | 👥 @venue.Capacity capacity
+                </div>
+            </div>
+            <div class="venue-actions">
+                <a href="/venues/location/@venue.Id" class="btn-small btn-view">View</a>
+                <a href="/venues/edit/@venue.Id" class="btn-small btn-edit">Edit</a>
+                <a href="/venues/delete/@venue.Id" class="btn-small btn-delete">Delete</a>
+            </div>
+        </div>
+    }
+}

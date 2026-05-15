@@ -8,241 +8,156 @@
 <style>
     .venues-header {
         margin-bottom: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .header-controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        width: 100%;
     }
 
     .venues-header h1 {
         font-size: 2.2rem;
         color: #e0e7ff;
-        margin-bottom: 8px;
+        margin-bottom: 0;
         font-weight: 700;
     }
 
-    .venues-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 24px;
-    }
-
-    .venue-card {
-        background: rgba(139, 92, 246, 0.08);
+    .search-box {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+        padding: 10px 14px;
+        background: rgba(139, 92, 246, 0.1);
         border: 1px solid rgba(139, 92, 246, 0.2);
-        border-radius: 14px;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .venue-card:hover {
-        transform: translateY(-8px);
-        border-color: rgba(139, 92, 246, 0.4);
-        box-shadow: 0 16px 40px rgba(139, 92, 246, 0.15);
-    }
-
-    .venue-card-header {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.15));
-        padding: 20px;
-        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-    }
-
-    .venue-name {
-        font-size: 1.3rem;
-        font-weight: 700;
+        border-radius: 8px;
         color: #e0e7ff;
-        margin-bottom: 8px;
-    }
-
-    .venue-location {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        color: #a5b4fc;
         font-size: 0.9rem;
     }
 
-    .venue-card-body {
-        padding: 20px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
+    .search-box::placeholder {
+        color: #6b7280;
     }
 
-    .venue-detail {
+    .btn-primary {
+        background: rgba(139, 92, 246, 0.9);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+    }
+
+    .btn-primary:hover {
+        background: rgba(139, 92, 246, 1);
+    }
+
+    .venues-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .venue-row {
+        background: rgba(139, 92, 246, 0.08);
+        border: 1px solid rgba(139, 92, 246, 0.15);
+        border-radius: 8px;
+        padding: 16px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-bottom: 12px;
-        border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        transition: all 0.2s;
     }
 
-    .venue-detail:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
+    .venue-row:hover {
+        background: rgba(139, 92, 246, 0.12);
+        border-color: rgba(139, 92, 246, 0.25);
     }
 
-    .venue-detail-label {
-        color: #8b5cf6;
-        font-size: 0.85rem;
-        text-transform: uppercase;
+    .venue-info {
+        flex: 1;
+    }
+
+    .venue-name {
+        color: #e0e7ff;
         font-weight: 600;
-    }
-
-    .venue-detail-value {
-        color: #cbd5e1;
-        font-weight: 500;
-        text-align: right;
-    }
-
-    .venue-stats {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        background: rgba(139, 92, 246, 0.1);
-        border-radius: 10px;
-        padding: 12px;
-    }
-
-    .stat {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .stat-value {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #60a5fa;
         margin-bottom: 4px;
     }
 
-    .stat-label {
-        font-size: 0.75rem;
-        color: #8b5cf6;
-        text-transform: uppercase;
-        font-weight: 600;
+    .venue-meta {
+        color: #9ca3af;
+        font-size: 0.85rem;
     }
 
-    .venue-card-footer {
-        padding: 14px 20px;
-        border-top: 1px solid rgba(139, 92, 246, 0.2);
+    .venue-actions {
+        display: flex;
+        gap: 8px;
+        margin-left: 16px;
     }
 
-    .btn-details {
-        width: 100%;
-        padding: 10px 16px;
-        background: rgba(59, 130, 246, 0.2);
-        border: 1px solid rgba(59, 130, 246, 0.3);
-        color: #93c5fd;
-        border-radius: 8px;
+    .btn-small {
+        padding: 6px 12px;
+        font-size: 0.8rem;
         text-decoration: none;
-        text-align: center;
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
+        border: none;
+        border-radius: 4px;
         cursor: pointer;
+        display: inline-block;
     }
 
-    .btn-details:hover {
-        background: rgba(59, 130, 246, 0.3);
-        border-color: rgba(59, 130, 246, 0.5);
-        color: #e0e7ff;
+    .btn-view {
+        background: rgba(34, 197, 94, 0.2);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.3);
     }
 
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: #8b5cf6;
+    .btn-edit {
+        background: rgba(59, 130, 246, 0.2);
+        color: #93c5fd;
+        border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
-    .empty-state-icon {
-        font-size: 3rem;
-        margin-bottom: 16px;
+    .btn-delete {
+        background: rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
-    .empty-state-text {
-        font-size: 1.1rem;
-        margin-bottom: 8px;
-    }
-
-    @@media (max-width: 768px) {
-        .venues-grid {
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
-        }
-
-        .venues-header h1 {
-            font-size: 1.8rem;
-        }
-    }
-
-    @@media (max-width: 480px) {
-        .venues-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .venue-name {
-            font-size: 1.1rem;
-        }
+    .btn-small:hover {
+        opacity: 0.8;
     }
 </style>
 
-<div class="index-container">
-    <div class="venues-header">
-        <h1>🏢 Venues</h1>
-        <p style="color: #a5b4fc; margin-top: 8px;">Manage tournament venues and facilities</p>
+<div class="venues-header">
+    <h1>🏢 Venues</h1>
+    <div class="header-controls">
+        <input type="text" id="searchInput" class="search-box" placeholder="Search venues by name or city...">
+        <a href="/venues/create" class="btn-primary">+ Add New Venue</a>
     </div>
-
-    @if (Model.Any())
-    {
-        <div class="venues-grid">
-            @foreach (var venue in Model)
-            {
-                <div class="venue-card">
-                    <div class="venue-card-header">
-                        <div class="venue-name">@venue.Name</div>
-                        <div class="venue-location">
-                            📍 @venue.City, @venue.CountryCode
-                        </div>
-                    </div>
-
-                    <div class="venue-card-body">
-                        <div class="venue-detail">
-                            <span class="venue-detail-label">📍 Address</span>
-                            <span class="venue-detail-value">@venue.AddressLine</span>
-                        </div>
-
-                        <div class="venue-stats">
-                            <div class="stat">
-                                <div class="stat-value">@venue.NumberOfTables</div>
-                                <div class="stat-label">Tables</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">@venue.Capacity</div>
-                                <div class="stat-label">Capacity</div>
-                            </div>
-                        </div>
-
-                        <div class="venue-detail">
-                            <span class="venue-detail-label">🕐 Time Zone</span>
-                            <span class="venue-detail-value">@venue.TimeZoneId</span>
-                        </div>
-                    </div>
-
-                    <div class="venue-card-footer">
-                        <a href="/venues/location/@venue.Id" class="btn-details">View Details →</a>
-                    </div>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <div class="empty-state">
-            <div class="empty-state-icon">🏢</div>
-            <div class="empty-state-text">No venues yet</div>
-            <p style="color: #6b7280; font-size: 0.95rem;">Add your first venue to get started</p>
-        </div>
-    }
 </div>
+
+<div id="resultsList" class="venues-list">
+    @await Html.PartialAsync("_VenuesList", Model)
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#searchInput').on('keyup', function() {
+            var query = $(this).val();
+            $.get('/venues/search?query=' + encodeURIComponent(query), function(data) {
+                $('#resultsList').html(data);
+            });
+        });
+    });
+</script>

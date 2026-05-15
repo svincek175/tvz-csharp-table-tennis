@@ -1,0 +1,61 @@
+@model IEnumerable<TableTennisTracker.Domain.Models.Match>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="empty-state">
+        <div class="empty-state-icon">🛈</div>
+        <div class="empty-state-text">No matches found.</div>
+        <div class="empty-state-sub">Create a new match to get started.</div>
+    </div>
+}
+else
+{
+    <div class="matches-grid">
+    @foreach (var match in Model)
+    {
+        <div class="match-card">
+            <div class="match-card-header">
+                <div>
+                    <div class="match-info-small">@match.Tournament?.Name</div>
+                    <div class="player-name-match">Round @match.RoundNumber</div>
+                </div>
+                <div>
+                    <span class="match-status-badge @(match.Status == TableTennisTracker.Domain.Enums.MatchStatus.Scheduled ? "status-scheduled" : match.Status == TableTennisTracker.Domain.Enums.MatchStatus.InProgress ? "status-in-progress" : "status-completed")">@match.Status</span>
+                </div>
+            </div>
+            <div class="match-card-body">
+                <div class="match-players">
+                    @foreach (var p in match.Participants)
+                    {
+                        <div class="match-player">
+                            <div class="player-details">
+                                <div class="player-name-match">@($"{p.Player?.FirstName} {p.Player?.LastName}")</div>
+                                <div class="player-country-match">@($"Slot {p.Slot}")</div>
+                            </div>
+                            <div class="vs-separator">vs</div>
+                        </div>
+                    }
+                </div>
+
+                <div class="match-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Table</div>
+                        <div class="detail-value">@match.TableNumber</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Started</div>
+                        <div class="detail-value">@match.ActualStartUtc?.ToLocalTime().ToString("g")</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Participants</div>
+                        <div class="detail-value">@match.Participants.Count</div>
+                    </div>
+                </div>
+            </div>
+            <div class="match-card-footer">
+                <a href="/matches/view/@match.Id" class="btn-details">View Match</a>
+            </div>
+        </div>
+    }
+    </div>
+}

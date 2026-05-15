@@ -6,6 +6,13 @@
     <title>@ViewData["Title"] - Table Tennis Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/lucide@latest" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="~/css/autocomplete-dropdown.css" />
+    <link rel="stylesheet" href="~/css/animations.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <link rel="stylesheet" href="~/css/datepicker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/hr.js"></script>
     <style>
         * {
             margin: 0;
@@ -534,7 +541,7 @@
 
             <nav class="nav-section">
                 <div class="nav-section-title">Entities</div>
-                <a href="/Tournaments" class="nav-link tournaments" data-breadcrumb="Tournaments">
+                <a href="/tournaments/list" class="nav-link tournaments" data-breadcrumb="Tournaments">
                     <span class="nav-icon">🏆</span>
                     <span>Tournaments</span>
                 </a>
@@ -554,11 +561,11 @@
                     <span class="nav-icon">📋</span>
                     <span>Registrations</span>
                 </a>
-                <a href="/MatchParticipants" class="nav-link matchparticipants" data-breadcrumb="Participants">
+                <a href="/match-participants/list" class="nav-link matchparticipants" data-breadcrumb="Participants">
                     <span class="nav-icon">🎯</span>
                     <span>Participants</span>
                 </a>
-                <a href="/MatchSetResults" class="nav-link matchsetresults" data-breadcrumb="Set Results">
+                <a href="/match-set-results/list" class="nav-link matchsetresults" data-breadcrumb="Set Results">
                     <span class="nav-icon">📊</span>
                     <span>Set Results</span>
                 </a>
@@ -609,6 +616,11 @@
     </div>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/autocomplete-dropdown.js"></script>
+    <script src="~/js/form-validation.js"></script>
+    <script src="~/js/animations.js"></script>
 
     <script>
         // Set active navigation state based on current page

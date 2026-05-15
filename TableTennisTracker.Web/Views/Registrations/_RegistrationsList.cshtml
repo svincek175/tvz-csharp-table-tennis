@@ -1,0 +1,28 @@
+@model IEnumerable<TableTennisTracker.Domain.Models.Registration>
+
+@if (Model == null || !Model.Any())
+{
+    <div style="text-align: center; padding: 40px; color: #9ca3af;">
+        <p>No registrations found.</p>
+    </div>
+}
+else
+{
+    @foreach (var reg in Model)
+    {
+        <div class="registration-row">
+            <div class="registration-info">
+                <div class="registration-name">@reg.Player?.FirstName @reg.Player?.LastName</div>
+                <div class="registration-meta">
+                    Tournament: @reg.Tournament?.Name | Registered: @reg.RegisteredUtc.ToString("yyyy-MM-dd") |
+                    @(reg.IsCheckedIn ? "✅ Checked In" : "❌ Not Checked In")
+                </div>
+            </div>
+            <div class="registration-actions">
+                <a href="/registrations/info/@reg.Id" class="btn-small btn-view">View</a>
+                <a href="/registrations/edit/@reg.Id" class="btn-small btn-edit">Edit</a>
+                <a href="/registrations/delete/@reg.Id" class="btn-small btn-delete">Delete</a>
+            </div>
+        </div>
+    }
+}

@@ -2,32 +2,140 @@
 
 @{
     ViewData["Title"] = "Match Participants";
-    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Participants", "/MatchParticipants") };
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Match Participants", "/match-participants/list") };
 }
 
 <style>
     .participants-header {
         margin-bottom: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
     }
 
     .participants-header h1 {
         font-size: 2.2rem;
         color: #e0e7ff;
-        margin-bottom: 8px;
+        margin-bottom: 0;
         font-weight: 700;
-    }
-
-    .participants-controls {
-        display: flex;
-        gap: 16px;
-        margin-top: 16px;
-        align-items: center;
-        flex-wrap: wrap;
     }
 
     .search-box {
         flex: 1;
-        min-width: 200px;
+        min-width: 0;
+        width: 100%;
+        padding: 10px 14px;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 8px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+    }
+
+    .participants-controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .search-box::placeholder {
+        color: #6b7280;
+    }
+
+    .btn-primary {
+        background: rgba(139, 92, 246, 0.9);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+    }
+
+    .btn-primary:hover {
+        background: rgba(139, 92, 246, 1);
+    }
+
+    .participants-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .participant-row {
+        background: rgba(139, 92, 246, 0.08);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s;
+    }
+
+    .participant-row:hover {
+        background: rgba(139, 92, 246, 0.12);
+        border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .participant-info {
+        flex: 1;
+    }
+
+    .participant-name {
+        color: #e0e7ff;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .participant-meta {
+        color: #9ca3af;
+        font-size: 0.85rem;
+    }
+
+    .participant-actions {
+        display: flex;
+        gap: 8px;
+        margin-left: 16px;
+    }
+
+    .btn-small {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        text-decoration: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    .btn-view {
+        background: rgba(34, 197, 94, 0.2);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .btn-edit {
+        background: rgba(59, 130, 246, 0.2);
+        color: #93c5fd;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-delete {
+        background: rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-small:hover {
+        opacity: 0.8;
+    }
         padding: 10px 14px;
         background: rgba(139, 92, 246, 0.1);
         border: 1px solid rgba(139, 92, 246, 0.2);
@@ -229,6 +337,7 @@
         <p style="color: #a5b4fc; margin-top: 8px;">Track all participants across matches</p>
         <div class="participants-controls">
             <input type="text" class="search-box" placeholder="Search by player name..." id="participantSearch">
+            <a href="/match-participants/create" class="btn-primary">+ Add New Participant</a>
         </div>
     </div>
 
@@ -267,7 +376,7 @@
                     </div>
 
                     <div style="text-align: center;">
-                        <a href="/MatchParticipants/Details/@participant.Id" class="btn-view">View</a>
+                        <a href="/match-participants/view/@participant.Id" class="btn-view">View</a>
                     </div>
                 </div>
             }

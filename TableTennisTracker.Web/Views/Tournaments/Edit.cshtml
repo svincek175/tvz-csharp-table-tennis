@@ -1,0 +1,209 @@
+@model TableTennisTracker.Domain.Models.Tournament
+@using System.Linq
+@using TableTennisTracker.Domain.Models
+@using TableTennisTracker.Web.ViewModels
+
+@{
+    ViewData["Title"] = "Edit Tournament";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Tournaments", "/tournaments/list"), ("Edit", "") };
+
+    var venues = ViewBag.Venues as IEnumerable<Venue> ?? Enumerable.Empty<Venue>();
+    var selectedVenue = venues.FirstOrDefault(venue => venue.Id == Model.VenueId);
+}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-header {
+        margin-bottom: 32px;
+    }
+
+    .form-header h1 {
+        color: #e0e7ff;
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-group:has(#VenueId) {
+        margin-bottom: 48px;
+    }
+
+    .form-label {
+        display: block;
+        color: #e0e7ff;
+        margin-bottom: 10px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    #VenueId {
+        margin-bottom: 24px;
+    }
+
+    .form-control,
+    .form-select {
+        width: 100%;
+        padding: 13px 14px;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: rgba(139, 92, 246, 0.5);
+        background: rgba(139, 92, 246, 0.15);
+    }
+
+    .form-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-checkbox input {
+        width: auto;
+        margin: 0;
+    }
+
+    .form-checkbox label {
+        margin: 0;
+        color: #e0e7ff;
+    }
+
+    .validation-error {
+        color: #fca5a5;
+        font-size: 0.8rem;
+        margin-top: 6px;
+        margin-bottom: 16px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 36px;
+    }
+
+    .btn-submit {
+        background: rgba(139, 92, 246, 0.9);
+        color: white;
+        padding: 11px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: background 0.3s;
+    }
+
+    .btn-submit:hover {
+        background: rgba(139, 92, 246, 1);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #9ca3af;
+        padding: 11px 24px;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel:hover {
+        color: #e0e7ff;
+        border-color: rgba(139, 92, 246, 0.4);
+    }
+</style>
+
+<div class="form-container">
+    <div class="form-header">
+        <h1>✏️ Edit Tournament</h1>
+    </div>
+
+    <form method="post" action="/tournaments/edit/@Model.Id">
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.Id)
+
+        <div class="form-group">
+            <label class="form-label">Name *</label>
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Season Label</label>
+            @Html.TextBoxFor(m => m.SeasonLabel, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.SeasonLabel, "", new { @class = "validation-error" })
+        </div>
+
+        @await Html.PartialAsync("_AutocompleteLookup", new AutocompleteLookupViewModel
+        {
+            InputId = nameof(Model.VenueId),
+            InputName = nameof(Model.VenueId),
+            Label = "Venue *",
+            Placeholder = "Search venues...",
+            LookupUrl = "/venues/lookup",
+            SelectedValue = Model.VenueId == Guid.Empty ? null : Model.VenueId.ToString(),
+            SelectedText = selectedVenue is null ? null : selectedVenue.Name
+        })
+        @Html.ValidationMessageFor(m => m.VenueId, "", new { @class = "validation-error" })
+
+        @await Html.PartialAsync("_DatePicker", new DatePickerViewModel
+        {
+            FieldId = nameof(Model.StartUtc),
+            FieldName = nameof(Model.StartUtc),
+            Label = "Start Date/Time",
+            Value = Model.StartUtc == default ? null : Model.StartUtc.ToString("yyyy-MM-ddTHH:mm"),
+            EnableTime = true
+        })
+        @Html.ValidationMessageFor(m => m.StartUtc, "", new { @class = "validation-error" })
+
+        @await Html.PartialAsync("_DatePicker", new DatePickerViewModel
+        {
+            FieldId = nameof(Model.EndUtc),
+            FieldName = nameof(Model.EndUtc),
+            Label = "End Date/Time",
+            Value = Model.EndUtc == default ? null : Model.EndUtc.ToString("yyyy-MM-ddTHH:mm"),
+            EnableTime = true
+        })
+        @Html.ValidationMessageFor(m => m.EndUtc, "", new { @class = "validation-error" })
+
+        <div class="form-group">
+            <label class="form-label">Max Players</label>
+            @Html.TextBoxFor(m => m.MaxPlayers, new { @class = "form-control", type = "number" })
+            @Html.ValidationMessageFor(m => m.MaxPlayers, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Best of (Sets)</label>
+            @Html.TextBoxFor(m => m.BestOfSets, new { @class = "form-control", type = "number" })
+            @Html.ValidationMessageFor(m => m.BestOfSets, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group form-checkbox">
+            @Html.CheckBoxFor(m => m.IsRankingEvent)
+            <label>Ranking Event</label>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Save Changes</button>
+            <a href="/tournaments/view/@Model.Id" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>

@@ -656,7 +656,7 @@
 
             <!-- ENTITY CARDS -->
             <div style="display: grid; gap: 16px;">
-                <a href="/Tournaments" class="entity-card">
+                <a href="/tournaments/list" class="entity-card">
                     <div class="entity-card-header">
                         <div class="entity-icon">🏆</div>
                         <div class="entity-count">@Model.TournamentCount</div>
@@ -716,7 +716,7 @@
         
         if (tournaments && tournaments.length > 0) {
             tournamentsContainer.innerHTML = tournaments.map(t => `
-                <a href="/Tournaments/Details/${t.id}" style="text-decoration: none; color: inherit;">
+                <a href="/tournaments/view/${t.id}" style="text-decoration: none; color: inherit;">
                     <div class="tournament-item">
                         <div class="tournament-item-info">
                             <div class="tournament-item-name">${t.name || 'Tournament'}</div>

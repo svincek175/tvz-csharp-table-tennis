@@ -2,32 +2,29 @@
 
 @{
     ViewData["Title"] = "Match Set Results";
-    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Set Results", "/MatchSetResults") };
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Match Set Results", "/match-set-results/list") };
 }
 
 <style>
     .setresults-header {
         margin-bottom: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
     }
 
     .setresults-header h1 {
         font-size: 2.2rem;
         color: #e0e7ff;
-        margin-bottom: 8px;
+        margin-bottom: 0;
         font-weight: 700;
-    }
-
-    .setresults-controls {
-        display: flex;
-        gap: 16px;
-        margin-top: 16px;
-        align-items: center;
-        flex-wrap: wrap;
     }
 
     .search-box {
         flex: 1;
-        min-width: 200px;
+        min-width: 0;
+        width: 100%;
         padding: 10px 14px;
         background: rgba(139, 92, 246, 0.1);
         border: 1px solid rgba(139, 92, 246, 0.2);
@@ -36,8 +33,33 @@
         font-size: 0.9rem;
     }
 
+    .header-controls {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
     .search-box::placeholder {
         color: #6b7280;
+    }
+
+    .btn-primary {
+        background: rgba(139, 92, 246, 0.9);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+    }
+
+    .btn-primary:hover {
+        background: rgba(139, 92, 246, 1);
     }
 
     .setresults-list {
@@ -51,264 +73,90 @@
         border: 1px solid rgba(139, 92, 246, 0.2);
         border-radius: 12px;
         padding: 18px;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1.5fr 1.5fr auto;
-        gap: 16px;
+        display: flex;
+        justify-content: space-between;
         align-items: center;
-        transition: all 0.3s ease;
+        transition: all 0.2s;
     }
 
     .setresult-row:hover {
         background: rgba(139, 92, 246, 0.12);
         border-color: rgba(139, 92, 246, 0.3);
-        transform: translateX(4px);
     }
 
-    .match-info {
-        display: flex;
-        flex-direction: column;
+    .setresult-info {
+        flex: 1;
     }
 
-    .match-id-label {
-        color: #8b5cf6;
-        font-size: 0.75rem;
-        text-transform: uppercase;
+    .setresult-name {
+        color: #e0e7ff;
         font-weight: 600;
         margin-bottom: 4px;
     }
 
-    .match-id-value {
-        color: #e0e7ff;
-        font-weight: 700;
-        font-size: 1.05rem;
-    }
-
-    .set-info {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .set-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 50px;
-        height: 50px;
-        border-radius: 8px;
-        background: rgba(59, 130, 246, 0.2);
-        color: #93c5fd;
-        font-weight: 700;
-        font-size: 1.2rem;
-        border: 1px solid rgba(59, 130, 246, 0.3);
-    }
-
-    .set-label {
-        color: #8b5cf6;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        font-weight: 600;
-        margin-top: 4px;
-    }
-
-    .score-display {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-    }
-
-    .player-score {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        padding: 12px 16px;
-        background: rgba(139, 92, 246, 0.1);
-        border-radius: 8px;
-        min-width: 80px;
-    }
-
-    .score-points {
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: #60a5fa;
-    }
-
-    .score-label {
-        font-size: 0.7rem;
-        color: #8b5cf6;
-        text-transform: uppercase;
-        font-weight: 600;
-    }
-
-    .vs-indicator {
-        color: #8b5cf6;
-        font-weight: 700;
-        font-size: 0.9rem;
-    }
-
-    .setresult-row-header {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1.5fr 1.5fr auto;
-        gap: 16px;
-        padding: 12px 18px;
-        background: rgba(139, 92, 246, 0.1);
-        border-radius: 10px;
-        margin-bottom: 16px;
-        font-weight: 600;
-        color: #c7d2fe;
+    .setresult-meta {
+        color: #9ca3af;
         font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+    }
+
+    .setresult-actions {
+        display: flex;
+        gap: 8px;
+        margin-left: 16px;
+    }
+
+    .btn-small {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        text-decoration: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-block;
     }
 
     .btn-view {
-        padding: 8px 14px;
+        background: rgba(34, 197, 94, 0.2);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .btn-edit {
         background: rgba(59, 130, 246, 0.2);
-        border: 1px solid rgba(59, 130, 246, 0.3);
         color: #93c5fd;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.85rem;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        white-space: nowrap;
+        border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
-    .btn-view:hover {
-        background: rgba(59, 130, 246, 0.3);
-        border-color: rgba(59, 130, 246, 0.5);
-        color: #e0e7ff;
+    .btn-delete {
+        background: rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: #8b5cf6;
-    }
-
-    .empty-state-icon {
-        font-size: 3rem;
-        margin-bottom: 16px;
-    }
-
-    .empty-state-text {
-        font-size: 1.1rem;
-        margin-bottom: 8px;
-    }
-
-    @@media (max-width: 1024px) {
-        .setresult-row,
-        .setresult-row-header {
-            grid-template-columns: 1fr 1fr auto;
-        }
-
-        .setresult-row > div:nth-child(4),
-        .setresult-row-header > *:nth-child(4) {
-            display: none;
-        }
-    }
-
-    @@media (max-width: 768px) {
-        .setresult-row,
-        .setresult-row-header {
-            grid-template-columns: 1fr auto;
-            gap: 12px;
-        }
-
-        .setresult-row > div:nth-child(2),
-        .setresult-row > div:nth-child(4),
-        .setresult-row-header > *:nth-child(2),
-        .setresult-row-header > *:nth-child(4) {
-            display: none;
-        }
-
-        .setresults-header h1 {
-            font-size: 1.8rem;
-        }
-
-        .score-display {
-            flex-direction: column;
-            gap: 8px;
-        }
+    .btn-small:hover {
+        opacity: 0.8;
     }
 </style>
 
-<div class="index-container">
-    <div class="setresults-header">
-        <h1>📊 Match Set Results</h1>
-        <p style="color: #a5b4fc; margin-top: 8px;">Review all set scores across matches</p>
-        <div class="setresults-controls">
-            <input type="text" class="search-box" placeholder="Search by match ID..." id="setresultSearch">
-        </div>
+<div class="setresults-header">
+    <h1>📊 Match Set Results</h1>
+    <div class="header-controls">
+        <input type="text" id="searchInput" class="search-box" placeholder="Search set results by match or tournament...">
+        <a href="/match-set-results/create" class="btn-primary">+ Add New Result</a>
     </div>
+</div>
 
-    @if (Model.Any())
-    {
-        <div class="setresult-row-header">
-            <div>Match ID</div>
-            <div>Set Number</div>
-            <div>Player One</div>
-            <div>Player Two</div>
-            <div style="text-align: center;">Action</div>
-        </div>
-
-        <div class="setresults-list">
-            @foreach (var setResult in Model.OrderBy(s => s.MatchId).ThenBy(s => s.SetNumber))
-            {
-                <div class="setresult-row">
-                    <div class="match-info">
-                        <div class="match-id-label">Match ID</div>
-                        <div class="match-id-value">#@setResult.MatchId</div>
-                    </div>
-
-                    <div class="set-info">
-                        <div class="set-badge">@setResult.SetNumber</div>
-                        <div class="set-label">Set #</div>
-                    </div>
-
-                    <div class="score-display">
-                        <div class="player-score">
-                            <div class="score-label">Player 1</div>
-                            <div class="score-points">@setResult.PlayerOnePoints</div>
-                        </div>
-                        <div class="vs-indicator">vs</div>
-                    </div>
-
-                    <div class="score-display">
-                        <div class="vs-indicator">vs</div>
-                        <div class="player-score">
-                            <div class="score-label">Player 2</div>
-                            <div class="score-points">@setResult.PlayerTwoPoints</div>
-                        </div>
-                    </div>
-
-                    <div style="text-align: center;">
-                        <a href="/MatchSetResults/Details/@setResult.Id" class="btn-view">View</a>
-                    </div>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <div class="empty-state">
-            <div class="empty-state-icon">📊</div>
-            <div class="empty-state-text">No set results yet</div>
-            <p style="color: #6b7280; font-size: 0.95rem;">Set results will appear as matches are played</p>
-        </div>
-    }
+<div id="resultsList" class="setresults-list">
+    @await Html.PartialAsync("_MatchSetResultsList", Model)
 </div>
 
 <script>
-    document.getElementById('setresultSearch')?.addEventListener('keyup', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        document.querySelectorAll('.setresult-row').forEach(row => {
-            const matchId = row.querySelector('.match-id-value').textContent.toLowerCase();
-            row.style.display = matchId.includes(searchTerm) ? '' : 'none';
+    $(document).ready(function() {
+        $('#searchInput').on('keyup', function() {
+            var query = $(this).val();
+            $.get('/match-set-results/search?query=' + encodeURIComponent(query), function(data) {
+                $('#resultsList').html(data);
+            });
         });
     });
 </script>

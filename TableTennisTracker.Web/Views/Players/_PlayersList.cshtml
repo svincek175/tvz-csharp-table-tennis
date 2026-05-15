@@ -1,0 +1,28 @@
+@model IEnumerable<TableTennisTracker.Domain.Models.Player>
+
+@if (Model == null || !Model.Any())
+{
+    <div style="text-align: center; padding: 40px; color: #9ca3af;">
+        <p>No players found.</p>
+    </div>
+}
+else
+{
+    @foreach (var player in Model)
+    {
+        <div class="player-row">
+            <div class="player-info">
+                <div class="player-name">@player.FirstName @player.LastName</div>
+                <div class="player-meta">
+                    🌍 @player.CountryCode | 🏆 @player.CurrentRankingPoints pts | 
+                    @(player.IsActive ? "✅ Active" : "❌ Inactive")
+                </div>
+            </div>
+            <div class="player-actions">
+                <a href="/players/profile/@player.Id" class="btn-small btn-view">View</a>
+                <a href="/players/edit/@player.Id" class="btn-small btn-edit">Edit</a>
+                <a href="/players/delete/@player.Id" class="btn-small btn-delete">Delete</a>
+            </div>
+        </div>
+    }
+}

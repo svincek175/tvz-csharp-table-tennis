@@ -1,0 +1,154 @@
+@model TableTennisTracker.Domain.Models.MatchSetResult
+@using System.Linq
+@using TableTennisTracker.Domain.Models
+@using TableTennisTracker.Web.ViewModels
+
+@{
+    ViewData["Title"] = "Edit Match Set Result";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Match Set Results", "/match-set-results/list"), ("Edit", "") };
+
+    var matches = ViewBag.Matches as IEnumerable<Match> ?? Enumerable.Empty<Match>();
+    var selectedMatch = matches.FirstOrDefault(match => match.Id == Model.MatchId);
+}
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .form-header {
+        margin-bottom: 32px;
+    }
+
+    .form-header h1 {
+        color: #e0e7ff;
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 36px;
+    }
+
+    .form-label {
+        display: block;
+        color: #e0e7ff;
+        margin-bottom: 10px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .form-control,
+    .form-select {
+        width: 100%;
+        padding: 13px 14px;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: rgba(139, 92, 246, 0.5);
+        background: rgba(139, 92, 246, 0.15);
+    }
+
+    .validation-error {
+        color: #fca5a5;
+        font-size: 0.8rem;
+        margin-top: 6px;
+        margin-bottom: 16px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 36px;
+    }
+
+    .btn-submit {
+        background: rgba(139, 92, 246, 0.9);
+        color: white;
+        padding: 11px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: background 0.3s;
+    }
+
+    .btn-submit:hover {
+        background: rgba(139, 92, 246, 1);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #9ca3af;
+        padding: 11px 24px;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel:hover {
+        color: #e0e7ff;
+        border-color: rgba(139, 92, 246, 0.4);
+    }
+</style>
+
+<div class="form-container">
+    <div class="form-header">
+        <h1>✏️ Edit Match Set Result</h1>
+    </div>
+
+    <form method="post" action="/match-set-results/edit/@Model.Id">
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.Id)
+
+        @await Html.PartialAsync("_AutocompleteLookup", new AutocompleteLookupViewModel
+        {
+            InputId = nameof(Model.MatchId),
+            InputName = nameof(Model.MatchId),
+            Label = "Match *",
+            Placeholder = "Search matches...",
+            LookupUrl = "/match-set-results/matches-lookup",
+            SelectedValue = Model.MatchId == Guid.Empty ? null : Model.MatchId.ToString(),
+            SelectedText = selectedMatch is null ? null : selectedMatch.Tournament?.Name
+        })
+        @Html.ValidationMessageFor(m => m.MatchId, "", new { @class = "validation-error" })
+
+        <div class="form-group">
+            <label class="form-label">Set Number *</label>
+            @Html.TextBoxFor(m => m.SetNumber, new { @class = "form-control", type = "number" })
+            @Html.ValidationMessageFor(m => m.SetNumber, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Player 1 Points</label>
+            @Html.TextBoxFor(m => m.PlayerOnePoints, new { @class = "form-control", type = "number" })
+            @Html.ValidationMessageFor(m => m.PlayerOnePoints, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Player 2 Points</label>
+            @Html.TextBoxFor(m => m.PlayerTwoPoints, new { @class = "form-control", type = "number" })
+            @Html.ValidationMessageFor(m => m.PlayerTwoPoints, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Save Changes</button>
+            <a href="/match-set-results/view/@Model.Id" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>

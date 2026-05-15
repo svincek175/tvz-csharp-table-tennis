@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using TableTennisTracker.Domain.Models;
 using TableTennisTracker.Web.Infrastructure.Repositories;
+using TableTennisTracker.Web.Infrastructure;
 
 namespace TableTennisTracker.Web.Controllers;
 
@@ -7,10 +9,12 @@ namespace TableTennisTracker.Web.Controllers;
 public class MatchesController : Controller
 {
     private readonly IMatchRepository _matchRepository;
+    private readonly ITournamentRepository _tournamentRepository;
 
-    public MatchesController(IMatchRepository matchRepository)
+    public MatchesController(IMatchRepository matchRepository, ITournamentRepository tournamentRepository)
     {
         _matchRepository = matchRepository;
+        _tournamentRepository = tournamentRepository;
     }
 
     [HttpGet("all")]
@@ -18,6 +22,36 @@ public class MatchesController : Controller
     {
         var matches = await _matchRepository.GetAllAsync();
         return View(matches);
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            var allMatches = await _matchRepository.GetAllAsync();
+            return PartialView("_MatchesList", allMatches);
+        }
+
+        var matches = await _matchRepository.SearchAsync(query);
+        return PartialView("_MatchesList", matches);
+    }
+
+    [HttpGet("lookup")]
+    public async Task<IActionResult> Lookup(string query)
+    {
+        var matches = string.IsNullOrWhiteSpace(query)
+            ? await _matchRepository.GetAllAsync()
+            : await _matchRepository.SearchAsync(query);
+
+        var items = matches
+            .Take(10)
+            .Select(match => new TableTennisTracker.Web.ViewModels.AutocompleteLookupItem(
+                match.Id,
+                match.Tournament?.Name ?? "Match",
+                $"Round {match.RoundNumber} · Table {match.TableNumber}"));
+
+        return Json(items);
     }
 
     [HttpGet("view/{id:guid}")]
@@ -30,5 +64,82 @@ public class MatchesController : Controller
         }
 
         return View(match);
+    }
+
+    [HttpGet("create")]
+    public async Task<IActionResult> Create()
+    {
+        ViewBag.Tournaments = await _tournamentRepository.GetAllAsync();
+        return View();
+    }
+
+    [HttpPost("create")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Match match)
+    {
+        ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Match.TournamentId), match.TournamentId, "Tournament is required.");
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Tournaments = await _tournamentRepository.GetAllAsync();
+            return View(match);
+        }
+
+        var id = await _matchRepository.CreateAsync(match);
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpGet("edit/{id:guid}")]
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        var match = await _matchRepository.GetByIdAsync(id);
+        if (match is null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.Tournaments = await _tournamentRepository.GetAllAsync();
+        return View(match);
+    }
+
+    [HttpPost("edit/{id:guid}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(Guid id, Match match)
+    {
+        if (id != match.Id)
+        {
+            return BadRequest();
+        }
+
+        ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Match.TournamentId), match.TournamentId, "Tournament is required.");
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Tournaments = await _tournamentRepository.GetAllAsync();
+            return View(match);
+        }
+
+        await _matchRepository.UpdateAsync(match);
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpGet("delete/{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var match = await _matchRepository.GetByIdAsync(id);
+        if (match is null)
+        {
+            return NotFound();
+        }
+
+        return View(match);
+    }
+
+    [HttpPost("delete/{id:guid}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(Guid id)
+    {
+        await _matchRepository.DeleteAsync(id);
+        return RedirectToAction(nameof(Index));
     }
 }

@@ -1,0 +1,174 @@
+@model TableTennisTracker.Domain.Models.Player
+@using TableTennisTracker.Web.ViewModels
+
+@{
+    ViewData["Title"] = "Add New Player";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Players", "/players/list"), ("Create", "") };
+}
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .form-header {
+        margin-bottom: 32px;
+    }
+
+    .form-header h1 {
+        color: #e0e7ff;
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 36px;
+    }
+
+    .form-label {
+        display: block;
+        color: #e0e7ff;
+        margin-bottom: 10px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 13px 14px;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: rgba(139, 92, 246, 0.5);
+        background: rgba(139, 92, 246, 0.15);
+    }
+
+    .form-control::placeholder {
+        color: #6b7280;
+    }
+
+    .form-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-checkbox input {
+        width: auto;
+        margin: 0;
+    }
+
+    .form-checkbox label {
+        margin: 0;
+        color: #e0e7ff;
+    }
+
+    .validation-error {
+        color: #fca5a5;
+        font-size: 0.8rem;
+        margin-top: 6px;
+        margin-bottom: 16px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .btn-submit {
+        background: rgba(139, 92, 246, 0.9);
+        color: white;
+        padding: 11px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: background 0.3s;
+    }
+
+    .btn-submit:hover {
+        background: rgba(139, 92, 246, 1);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #9ca3af;
+        padding: 11px 24px;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel:hover {
+        color: #e0e7ff;
+        border-color: rgba(139, 92, 246, 0.4);
+    }
+</style>
+
+<div class="form-container">
+    <div class="form-header">
+        <h1>👤 Add New Player</h1>
+    </div>
+
+    <form method="post" action="/players/create">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label class="form-label">First Name *</label>
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "John" })
+            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Last Name *</label>
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Doe" })
+            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "validation-error" })
+        </div>
+
+        @await Html.PartialAsync("_DatePicker", new DatePickerViewModel
+        {
+            FieldId = nameof(Model.DateOfBirth),
+            FieldName = nameof(Model.DateOfBirth),
+            Label = "Date of Birth",
+            Value = Model.DateOfBirth == default ? null : Model.DateOfBirth.ToString("yyyy-MM-dd"),
+            EnableTime = false
+        })
+        @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "validation-error" })
+
+        <div class="form-group">
+            <label class="form-label">Country Code *</label>
+            @Html.TextBoxFor(m => m.CountryCode, new { @class = "form-control", @placeholder = "US", maxlength = "2" })
+            @Html.ValidationMessageFor(m => m.CountryCode, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Current Ranking Points</label>
+            @Html.TextBoxFor(m => m.CurrentRankingPoints, new { @class = "form-control", type = "number", @placeholder = "0" })
+            @Html.ValidationMessageFor(m => m.CurrentRankingPoints, "", new { @class = "validation-error" })
+        </div>
+
+        <div class="form-group form-checkbox">
+            @Html.CheckBoxFor(m => m.IsActive)
+            <label>Active</label>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Create Player</button>
+            <a href="/players/list" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>

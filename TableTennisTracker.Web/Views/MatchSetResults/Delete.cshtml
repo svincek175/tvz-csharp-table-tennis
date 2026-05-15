@@ -1,0 +1,133 @@
+@model TableTennisTracker.Domain.Models.MatchSetResult
+
+@{
+    ViewData["Title"] = "Delete Match Set Result";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Match Set Results", "/match-set-results/list"), ("Delete", "") };
+}
+
+<style>
+    .delete-container {
+        max-width: 500px;
+        margin: 0 auto;
+        background: rgba(239, 68, 68, 0.08);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: 8px;
+        padding: 32px;
+        text-align: center;
+    }
+
+    .delete-icon {
+        font-size: 3rem;
+        margin-bottom: 16px;
+    }
+
+    .delete-title {
+        color: #fca5a5;
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+
+    .delete-message {
+        color: #9ca3af;
+        margin-bottom: 24px;
+        line-height: 1.5;
+    }
+
+    .setresult-info {
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.15);
+        border-radius: 6px;
+        padding: 16px;
+        margin-bottom: 24px;
+        text-align: left;
+    }
+
+    .setresult-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+    }
+
+    .setresult-info-label {
+        color: #9ca3af;
+        font-weight: 500;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .btn-danger {
+        background: rgba(239, 68, 68, 0.8);
+        color: white;
+        padding: 11px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: background 0.3s;
+    }
+
+    .btn-danger:hover {
+        background: rgba(239, 68, 68, 1);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #9ca3af;
+        padding: 11px 24px;
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel:hover {
+        color: #e0e7ff;
+        border-color: rgba(139, 92, 246, 0.4);
+    }
+</style>
+
+<div class="delete-container">
+    <div class="delete-icon">⚠️</div>
+    <h1 class="delete-title">Delete Match Set Result?</h1>
+    <p class="delete-message">
+        This action cannot be undone. This will permanently delete the match set result.
+    </p>
+
+    <div class="setresult-info">
+        <div class="setresult-info-row">
+            <span class="setresult-info-label">Match:</span>
+            <span>@Model.Match?.Tournament?.Name</span>
+        </div>
+        <div class="setresult-info-row">
+            <span class="setresult-info-label">Set:</span>
+            <span>@Model.SetNumber</span>
+        </div>
+        <div class="setresult-info-row">
+            <span class="setresult-info-label">Player 1 Points:</span>
+            <span>@Model.PlayerOnePoints</span>
+        </div>
+        <div class="setresult-info-row">
+            <span class="setresult-info-label">Player 2 Points:</span>
+            <span>@Model.PlayerTwoPoints</span>
+        </div>
+    </div>
+
+    <form method="post" action="/match-set-results/delete/@Model.Id" style="display: inline;">
+        @Html.AntiForgeryToken()
+        <div class="form-actions">
+            <button type="submit" class="btn-danger">Delete Set Result</button>
+            <a href="/match-set-results/view/@Model.Id" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>

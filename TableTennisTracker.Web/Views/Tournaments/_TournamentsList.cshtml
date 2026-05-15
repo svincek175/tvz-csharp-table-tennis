@@ -1,0 +1,27 @@
+@model IEnumerable<TableTennisTracker.Domain.Models.Tournament>
+
+@if (Model == null || !Model.Any())
+{
+    <div style="text-align: center; padding: 40px; color: #9ca3af;">
+        <p>No tournaments found.</p>
+    </div>
+}
+else
+{
+    @foreach (var tournament in Model)
+    {
+        <div class="tournament-row">
+            <div class="tournament-info">
+                <div class="tournament-name">@tournament.Name</div>
+                <div class="tournament-meta">
+                    📅 @tournament.SeasonLabel | 📍 @tournament.Venue?.Name | 👥 @tournament.Registrations.Count registered
+                </div>
+            </div>
+            <div class="tournament-actions">
+                <a href="/tournaments/view/@tournament.Id" class="btn-small btn-view">View</a>
+                <a href="/tournaments/edit/@tournament.Id" class="btn-small btn-edit">Edit</a>
+                <a href="/tournaments/delete/@tournament.Id" class="btn-small btn-delete">Delete</a>
+            </div>
+        </div>
+    }
+}
