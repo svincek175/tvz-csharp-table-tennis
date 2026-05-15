@@ -21,7 +21,6 @@ public class Tournament
     public int MaxPlayers { get; set; }
     public int BestOfSets { get; set; }
 
-    [Required]
     [MaxLength(200)]
     public string OrganizerName { get; set; } = string.Empty;
 

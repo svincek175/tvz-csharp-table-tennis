@@ -70,7 +70,7 @@ public class TournamentsController : Controller
     public async Task<IActionResult> Create()
     {
         ViewBag.Venues = await _venueRepository.GetAllAsync();
-        return View();
+        return View(new Tournament());
     }
 
     [HttpPost("create")]

@@ -66,7 +66,7 @@ public class PlayersController : Controller
     [HttpGet("create")]
     public IActionResult Create()
     {
-        return View();
+        return View(new Player());
     }
 
     [HttpPost("create")]
