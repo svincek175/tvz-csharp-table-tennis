@@ -143,19 +143,27 @@ class AnimationController {
             // Click ripple effect
             button.addEventListener('click', (e) => {
                 this.createRipple(e, button);
-
-                // Disable button during submission to prevent double-click
-                if (button.type === 'submit') {
-                    setTimeout(() => {
-                        button.classList.add('button-submitting');
-                        button.disabled = true;
-                        button.style.opacity = '0.7';
-                    }, 100);
-                }
             });
 
             // Add smooth transitions
             button.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        });
+
+        document.querySelectorAll('form').forEach((form) => {
+            form.addEventListener('submit', (event) => {
+                if (event.defaultPrevented) {
+                    return;
+                }
+
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (!submitButton || submitButton.disabled) {
+                    return;
+                }
+
+                submitButton.classList.add('button-submitting');
+                submitButton.disabled = true;
+                submitButton.style.opacity = '0.7';
+            });
         });
     }
 

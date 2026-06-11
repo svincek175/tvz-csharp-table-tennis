@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using TableTennisTracker.Domain.Models;
 using TableTennisTracker.Web.Infrastructure.Repositories;
 using TableTennisTracker.Web.Infrastructure;
@@ -25,7 +26,7 @@ public class TournamentsController : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search(string query)
+    public async Task<IActionResult> Search(string query, string? filter = null)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -33,7 +34,7 @@ public class TournamentsController : Controller
             return PartialView("_TournamentsList", allTournaments);
         }
 
-        var tournaments = await _tournamentRepository.SearchAsync(query);
+        var tournaments = await _tournamentRepository.SearchAsync(query, filter);
         return PartialView("_TournamentsList", tournaments);
     }
 
@@ -67,6 +68,7 @@ public class TournamentsController : Controller
     }
 
     [HttpGet("create")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create()
     {
         ViewBag.Venues = await _venueRepository.GetAllAsync();
@@ -75,8 +77,10 @@ public class TournamentsController : Controller
 
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create(Tournament tournament)
     {
+        NormalizeTournamentDateTimes(tournament);
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Tournament.VenueId), tournament.VenueId, "Venue is required.");
 
         if (!ModelState.IsValid)
@@ -90,6 +94,7 @@ public class TournamentsController : Controller
     }
 
     [HttpGet("edit/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id)
     {
         var tournament = await _tournamentRepository.GetByIdAsync(id);
@@ -104,6 +109,7 @@ public class TournamentsController : Controller
 
     [HttpPost("edit/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id, Tournament tournament)
     {
         if (id != tournament.Id)
@@ -111,6 +117,7 @@ public class TournamentsController : Controller
             return BadRequest();
         }
 
+        NormalizeTournamentDateTimes(tournament);
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Tournament.VenueId), tournament.VenueId, "Venue is required.");
 
         if (!ModelState.IsValid)
@@ -123,7 +130,14 @@ public class TournamentsController : Controller
         return RedirectToAction(nameof(Details), new { id });
     }
 
+    private static void NormalizeTournamentDateTimes(Tournament tournament)
+    {
+        tournament.StartUtc = DateTime.SpecifyKind(tournament.StartUtc, DateTimeKind.Utc);
+        tournament.EndUtc = DateTime.SpecifyKind(tournament.EndUtc, DateTimeKind.Utc);
+    }
+
     [HttpGet("delete/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var tournament = await _tournamentRepository.GetByIdAsync(id);
@@ -137,6 +151,7 @@ public class TournamentsController : Controller
 
     [HttpPost("delete/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
         await _tournamentRepository.DeleteAsync(id);

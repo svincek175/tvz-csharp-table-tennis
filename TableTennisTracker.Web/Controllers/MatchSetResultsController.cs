@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableTennisTracker.Domain.Models;
 using TableTennisTracker.Web.Infrastructure.Repositories;
@@ -25,7 +26,7 @@ public class MatchSetResultsController : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search(string query)
+    public async Task<IActionResult> Search(string query, string? filter = null)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -33,7 +34,7 @@ public class MatchSetResultsController : Controller
             return PartialView("_MatchSetResultsList", allResults);
         }
 
-        var setResults = await _matchSetResultRepository.SearchAsync(query);
+        var setResults = await _matchSetResultRepository.SearchAsync(query, filter);
         return PartialView("_MatchSetResultsList", setResults);
     }
 
@@ -67,6 +68,7 @@ public class MatchSetResultsController : Controller
     }
 
     [HttpGet("create")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create()
     {
         ViewBag.Matches = await _matchRepository.GetAllAsync();
@@ -75,6 +77,7 @@ public class MatchSetResultsController : Controller
 
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create(MatchSetResult matchSetResult)
     {
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(MatchSetResult.MatchId), matchSetResult.MatchId, "Match is required.");
@@ -90,6 +93,7 @@ public class MatchSetResultsController : Controller
     }
 
     [HttpGet("edit/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id)
     {
         var setResult = await _matchSetResultRepository.GetByIdAsync(id);
@@ -104,6 +108,7 @@ public class MatchSetResultsController : Controller
 
     [HttpPost("edit/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id, MatchSetResult matchSetResult)
     {
         if (id != matchSetResult.Id)
@@ -124,6 +129,7 @@ public class MatchSetResultsController : Controller
     }
 
     [HttpGet("delete/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var setResult = await _matchSetResultRepository.GetByIdAsync(id);
@@ -137,6 +143,7 @@ public class MatchSetResultsController : Controller
 
     [HttpPost("delete/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
         await _matchSetResultRepository.DeleteAsync(id);

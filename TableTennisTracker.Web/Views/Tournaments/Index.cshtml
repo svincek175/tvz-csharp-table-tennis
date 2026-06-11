@@ -46,6 +46,16 @@
         color: #6b7280;
     }
 
+    .filter-select {
+        min-width: 160px;
+        padding: 10px 14px;
+        background: rgba(139, 92, 246, 0.15);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        border-radius: 8px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+    }
+
     .btn-primary {
         background: rgba(139, 92, 246, 0.9);
         color: white;
@@ -142,6 +152,12 @@
 <div class="tournaments-header">
     <h1>🏆 Tournaments</h1>
     <div class="header-controls">
+        <select id="filterSelect" class="filter-select">
+            <option value="all">All fields</option>
+            <option value="name">Name</option>
+            <option value="season">Season</option>
+            <option value="organizer">Organizer</option>
+        </select>
         <input type="text" id="searchInput" class="search-box" placeholder="Search tournaments by name or season...">
         <a href="/tournaments/create" class="btn-primary">+ Add New Tournament</a>
     </div>
@@ -153,11 +169,15 @@
 
 <script>
     $(document).ready(function() {
-        $('#searchInput').on('keyup', function() {
-            var query = $(this).val();
-            $.get('/tournaments/search?query=' + encodeURIComponent(query), function(data) {
+        function refreshTournaments() {
+            var query = $('#searchInput').val();
+            var filter = $('#filterSelect').val();
+            $.get('/tournaments/search?query=' + encodeURIComponent(query) + '&filter=' + encodeURIComponent(filter), function(data) {
                 $('#resultsList').html(data);
             });
-        });
+        }
+
+        $('#searchInput').on('keyup', refreshTournaments);
+        $('#filterSelect').on('change', refreshTournaments);
     });
 </script>

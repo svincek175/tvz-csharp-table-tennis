@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableTennisTracker.Domain.Models;
 using TableTennisTracker.Web.Infrastructure.Repositories;
@@ -27,7 +28,7 @@ public class MatchParticipantsController : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search(string query)
+    public async Task<IActionResult> Search(string query, string? filter = null)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -35,7 +36,7 @@ public class MatchParticipantsController : Controller
             return PartialView("_MatchParticipantsList", allParticipants);
         }
 
-        var participants = await _matchParticipantRepository.SearchAsync(query);
+        var participants = await _matchParticipantRepository.SearchAsync(query, filter);
         return PartialView("_MatchParticipantsList", participants);
     }
 
@@ -52,6 +53,7 @@ public class MatchParticipantsController : Controller
     }
 
     [HttpGet("create")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create()
     {
         ViewBag.Matches = await _matchRepository.GetAllAsync();
@@ -61,6 +63,7 @@ public class MatchParticipantsController : Controller
 
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create(MatchParticipant matchParticipant)
     {
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(MatchParticipant.MatchId), matchParticipant.MatchId, "Match is required.");
@@ -78,6 +81,7 @@ public class MatchParticipantsController : Controller
     }
 
     [HttpGet("edit/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id)
     {
         var participant = await _matchParticipantRepository.GetByIdAsync(id);
@@ -93,6 +97,7 @@ public class MatchParticipantsController : Controller
 
     [HttpPost("edit/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id, MatchParticipant matchParticipant)
     {
         if (id != matchParticipant.Id)
@@ -115,6 +120,7 @@ public class MatchParticipantsController : Controller
     }
 
     [HttpGet("delete/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var participant = await _matchParticipantRepository.GetByIdAsync(id);
@@ -128,6 +134,7 @@ public class MatchParticipantsController : Controller
 
     [HttpPost("delete/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
         await _matchParticipantRepository.DeleteAsync(id);

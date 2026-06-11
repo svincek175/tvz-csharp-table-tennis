@@ -10,7 +10,7 @@ else
 {
     @foreach (var participant in Model)
     {
-        <div class="participant-row">
+        <div class="participant-row" data-all="@($"{participant.Player?.FirstName} {participant.Player?.LastName} {participant.Match?.Tournament?.Name} {participant.Slot}".ToLowerInvariant())" data-player="@($"{participant.Player?.FirstName} {participant.Player?.LastName}".ToLowerInvariant())" data-match="@($"{participant.Match?.Tournament?.Name} r{participant.Match?.RoundNumber}".ToLowerInvariant())" data-slot="@participant.Slot">
             <div class="participant-info">
                 <div class="participant-name">@participant.Player?.FirstName @participant.Player?.LastName</div>
                 <div class="participant-meta">

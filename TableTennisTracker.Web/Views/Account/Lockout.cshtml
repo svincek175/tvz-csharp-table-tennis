@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "Account Locked";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Login", "/Account/Login"), ("Lockout", "/Account/Lockout") };
+}
+
+<style>
+    .status-container {
+        max-width: 520px;
+        margin: 80px auto;
+        padding: 34px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 200, 110, 0.45);
+        text-align: center;
+    }
+
+    .status-container h1 {
+        color: #ffed4e;
+        margin-bottom: 12px;
+    }
+
+    .status-container p {
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .status-link {
+        color: #00d4d4;
+        text-decoration: none;
+        font-weight: 700;
+    }
+</style>
+
+<div class="index-container">
+    <div class="status-container">
+        <h1>Account Temporarily Locked</h1>
+        <p>Your account is currently locked. Please wait and try again later, or contact an administrator.</p>
+        <a href="/" class="status-link">Back to Home</a>
+    </div>
+</div>

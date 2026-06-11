@@ -273,6 +273,129 @@
         margin: 8px 0;
     }
 
+    .quiz-upload-panel {
+        margin-top: 28px;
+        padding: 24px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .quiz-upload-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .quiz-upload-header h2 {
+        margin: 0;
+        font-size: 1.35rem;
+        color: #ffed4e;
+    }
+
+    .quiz-upload-header p {
+        margin: 4px 0 0;
+        color: #b0b0ff;
+    }
+
+    .dropzone {
+        border: 2px dashed rgba(255, 237, 78, 0.45);
+        border-radius: 14px;
+        padding: 24px;
+        text-align: center;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.03);
+        transition: all 0.2s ease;
+    }
+
+    .dropzone.dragover {
+        background: rgba(255, 237, 78, 0.12);
+        border-color: #ffed4e;
+        transform: translateY(-2px);
+    }
+
+    .dropzone strong {
+        display: block;
+        font-size: 1.05rem;
+        margin-bottom: 8px;
+    }
+
+    .dropzone small {
+        color: #b0b0b0;
+    }
+
+    .upload-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .upload-button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        font-weight: 700;
+        color: #10131a;
+        background: linear-gradient(135deg, #ffed4e, #ff9f1c);
+        cursor: pointer;
+    }
+
+    .upload-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .file-list {
+        margin-top: 22px;
+        display: grid;
+        gap: 12px;
+    }
+
+    .file-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .file-row a {
+        color: #ffed4e;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .file-meta {
+        color: #b0b0b0;
+        font-size: 0.85rem;
+        margin-top: 4px;
+    }
+
+    .delete-file-button {
+        border: 1px solid rgba(255, 100, 100, 0.45);
+        background: rgba(255, 100, 100, 0.12);
+        color: #ffb3b3;
+        border-radius: 999px;
+        padding: 10px 14px;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .upload-status {
+        min-height: 1.2rem;
+        margin-top: 10px;
+        color: #b0b0ff;
+    }
+
     @@media (max-width: 1024px) {
         .quiz-content {
             grid-template-columns: 1fr;
@@ -323,6 +446,28 @@
             <h2>🏆 Quiz Complete!</h2>
             <p id="finalScoreText"></p>
             <p id="finalRankText"></p>
+        </div>
+
+        <div class="quiz-upload-panel">
+            <div class="quiz-upload-header">
+                <div>
+                    <h2>Quiz Files</h2>
+                    <p>Upload reference files and manage them without leaving the quiz page.</p>
+                </div>
+            </div>
+
+            <input id="quizFileInput" type="file" hidden />
+            <div id="quizDropzone" class="dropzone" role="button" tabindex="0" aria-label="Upload quiz file">
+                <strong>Drop a file here or click to choose one</strong>
+                <small>Uploads save to disk, and the file list loads through AJAX.</small>
+            </div>
+
+            <div class="upload-actions">
+                <button type="button" class="upload-button" id="uploadQuizFileButton">Upload Selected File</button>
+                <span class="upload-status" id="uploadStatus"></span>
+            </div>
+
+            <div class="file-list" id="quizFileList"></div>
         </div>
     </div>
 </div>
@@ -487,5 +632,129 @@
         panel.classList.add("show");
     }
 
+    async function loadQuizFiles() {
+        const list = document.getElementById("quizFileList");
+        list.innerHTML = "<div class='file-row'>Loading files...</div>";
+
+        const response = await fetch("/api/quizfiles", {
+            headers: { "Accept": "application/json" }
+        });
+
+        if (!response.ok) {
+            list.innerHTML = "<div class='file-row'>Unable to load uploaded files.</div>";
+            return;
+        }
+
+        const items = await response.json();
+        if (!items.length) {
+            list.innerHTML = "<div class='file-row'>No quiz files uploaded yet.</div>";
+            return;
+        }
+
+        list.innerHTML = items.map(item => {
+            const sizeKb = Math.max(1, Math.round((item.fileSizeBytes ?? item.FileSizeBytes ?? 0) / 1024));
+            const original = item.originalFileName ?? item.OriginalFileName ?? 'Uploaded file';
+            const url = item.downloadUrl ?? item.DownloadUrl ?? '#';
+            const id = item.id ?? item.Id;
+            const uploadedUtc = item.uploadedUtc ?? item.UploadedUtc;
+            return `
+                <div class="file-row" data-file-id="${id}">
+                    <div>
+                        <a href="${url}" target="_blank" rel="noopener">${original}</a>
+                        <div class="file-meta">${sizeKb} KB • ${uploadedUtc ? new Date(uploadedUtc).toLocaleString() : ''}</div>
+                    </div>
+                    <button type="button" class="delete-file-button" data-delete-file-id="${id}">Delete</button>
+                </div>
+            `;
+        }).join("");
+
+        list.querySelectorAll("[data-delete-file-id]").forEach(button => {
+            button.addEventListener("click", () => deleteQuizFile(button.dataset.deleteFileId));
+        });
+    }
+
+    async function uploadQuizFile(file) {
+        const status = document.getElementById("uploadStatus");
+        if (!file) {
+            status.textContent = "Choose a file first.";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        status.textContent = "Uploading...";
+        const response = await fetch("/api/quizfiles", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            const body = await response.text();
+            status.textContent = body || "Upload failed.";
+            return;
+        }
+
+        status.textContent = "Upload complete.";
+        document.getElementById("quizFileInput").value = "";
+        await loadQuizFiles();
+    }
+
+    async function deleteQuizFile(fileId) {
+        if (!fileId) return;
+        if (!window.confirm("Delete this uploaded file?")) return;
+
+        const response = await fetch(`/api/quizfiles/${fileId}`, { method: "DELETE" });
+        if (!response.ok) {
+            document.getElementById("uploadStatus").textContent = "Delete failed.";
+            return;
+        }
+
+        document.getElementById("uploadStatus").textContent = "File deleted.";
+        await loadQuizFiles();
+    }
+
+    function initQuizFiles() {
+        const dropzone = document.getElementById("quizDropzone");
+        const input = document.getElementById("quizFileInput");
+        const uploadButton = document.getElementById("uploadQuizFileButton");
+
+        dropzone?.addEventListener("click", () => input?.click());
+        dropzone?.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                input?.click();
+            }
+        });
+
+        dropzone?.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            dropzone.classList.add("dragover");
+        });
+
+        dropzone?.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+        dropzone?.addEventListener("drop", (event) => {
+            event.preventDefault();
+            dropzone.classList.remove("dragover");
+            if (event.dataTransfer?.files?.length) {
+                const transfer = new DataTransfer();
+                Array.from(event.dataTransfer.files).forEach(file => transfer.items.add(file));
+                input.files = transfer.files;
+                document.getElementById("uploadStatus").textContent = `${event.dataTransfer.files[0].name} ready to upload.`;
+            }
+        });
+
+        input?.addEventListener("change", () => {
+            document.getElementById("uploadStatus").textContent = input.files?.length ? `${input.files[0].name} ready to upload.` : "";
+        });
+
+        uploadButton?.addEventListener("click", async () => {
+            await uploadQuizFile(input?.files?.[0]);
+        });
+
+        loadQuizFiles();
+    }
+
     document.addEventListener("DOMContentLoaded", initQuiz);
+    document.addEventListener("DOMContentLoaded", initQuizFiles);
 </script>

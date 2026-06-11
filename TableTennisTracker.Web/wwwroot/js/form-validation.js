@@ -47,6 +47,13 @@
         return true;
     };
 
+    const clearIfPopulated = (input) => {
+        const name = input.getAttribute('name') || input.id;
+        if (input.value && input.value.trim() !== '') {
+            clearMessage(name);
+        }
+    };
+
     const bind = () => {
         // autocomplete hidden inputs
         document.querySelectorAll('.autocomplete-control input[type=hidden]').forEach(hidden => {
@@ -60,6 +67,13 @@
                 validateAutocomplete(hidden);
             });
 
+            search.addEventListener('input', () => {
+                clearMessage(hidden.getAttribute('name'));
+                if (search.value.trim() !== '') {
+                    clearMessage(search.getAttribute('name') || search.id);
+                }
+            });
+
             // also validate when the hidden input changes programmatically
             hidden.addEventListener('change', () => {
                 validateAutocomplete(hidden);
@@ -67,8 +81,18 @@
         });
 
         // generic required HTML5 inputs
-        document.querySelectorAll('input[required], textarea[required], select[required]').forEach(input => {
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            if (!input.getAttribute('name')) {
+                return;
+            }
+
             input.addEventListener('blur', () => validateRequiredHtml(input));
+            input.addEventListener('input', () => clearIfPopulated(input));
+            input.addEventListener('change', () => clearIfPopulated(input));
+
+            if (input.value && input.value.trim() !== '') {
+                clearMessage(input.getAttribute('name') || input.id);
+            }
         });
 
         // Run a quick validation on submit to ensure messages show
@@ -82,6 +106,14 @@
                 // validate HTML required
                 form.querySelectorAll('input[required], textarea[required], select[required]').forEach(inp => {
                     if (!validateRequiredHtml(inp)) ok = false;
+                });
+
+                // clear any stale messages for populated fields
+                form.querySelectorAll('input, textarea, select').forEach(inp => {
+                    const name = inp.getAttribute('name') || inp.id;
+                    if (name && inp.value && inp.value.trim && inp.value.trim() !== '') {
+                        clearMessage(name);
+                    }
                 });
 
                 if (!ok) {

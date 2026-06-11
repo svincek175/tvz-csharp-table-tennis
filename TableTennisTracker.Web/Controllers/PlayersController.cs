@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableTennisTracker.Domain.Models;
 using TableTennisTracker.Web.Infrastructure.Repositories;
@@ -22,7 +23,7 @@ public class PlayersController : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search(string query)
+    public async Task<IActionResult> Search(string query, string? filter = null)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -30,7 +31,7 @@ public class PlayersController : Controller
             return PartialView("_PlayersList", allPlayers);
         }
 
-        var players = await _playerRepository.SearchAsync(query);
+        var players = await _playerRepository.SearchAsync(query, filter);
         return PartialView("_PlayersList", players);
     }
 
@@ -64,6 +65,7 @@ public class PlayersController : Controller
     }
 
     [HttpGet("create")]
+    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         return View(new Player());
@@ -71,8 +73,10 @@ public class PlayersController : Controller
 
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create(Player player)
     {
+        NormalizePlayerDateTimes(player);
         if (!ModelState.IsValid)
         {
             return View(player);
@@ -84,6 +88,7 @@ public class PlayersController : Controller
     }
 
     [HttpGet("edit/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id)
     {
         var player = await _playerRepository.GetByIdAsync(id);
@@ -97,6 +102,7 @@ public class PlayersController : Controller
 
     [HttpPost("edit/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id, Player player)
     {
         if (id != player.Id)
@@ -104,6 +110,7 @@ public class PlayersController : Controller
             return BadRequest();
         }
 
+        NormalizePlayerDateTimes(player);
         if (!ModelState.IsValid)
         {
             return View(player);
@@ -113,7 +120,13 @@ public class PlayersController : Controller
         return RedirectToAction(nameof(Details), new { id });
     }
 
+    private static void NormalizePlayerDateTimes(Player player)
+    {
+        player.CreatedUtc = DateTime.SpecifyKind(player.CreatedUtc, DateTimeKind.Utc);
+    }
+
     [HttpGet("delete/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var player = await _playerRepository.GetByIdAsync(id);
@@ -127,6 +140,7 @@ public class PlayersController : Controller
 
     [HttpPost("delete/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
         await _playerRepository.DeleteAsync(id);

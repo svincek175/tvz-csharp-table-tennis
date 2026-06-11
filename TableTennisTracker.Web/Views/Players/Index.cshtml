@@ -29,6 +29,16 @@
         width: 100%;
     }
 
+    .filter-select {
+        min-width: 160px;
+        padding: 10px 14px;
+        background: rgba(139, 92, 246, 0.15);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        border-radius: 8px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+    }
+
     .search-box {
         flex: 1;
         min-width: 0;
@@ -141,6 +151,12 @@
 <div class="players-header">
     <h1>🎾 Players</h1>
     <div class="players-controls">
+        <select id="filterSelect" class="filter-select">
+            <option value="all">All fields</option>
+            <option value="name">Name</option>
+            <option value="country">Country</option>
+            <option value="status">Status</option>
+        </select>
         <input type="text" id="searchInput" class="search-box" placeholder="Search players by name or country...">
         <a href="/players/create" class="btn-primary">+ Add New Player</a>
     </div>
@@ -152,12 +168,16 @@
 
 <script>
     $(document).ready(function() {
-        $('#searchInput').on('keyup', function() {
-            var query = $(this).val();
-            $.get('/players/search?query=' + encodeURIComponent(query), function(data) {
+        function refreshPlayers() {
+            var query = $('#searchInput').val();
+            var filter = $('#filterSelect').val();
+            $.get('/players/search?query=' + encodeURIComponent(query) + '&filter=' + encodeURIComponent(filter), function(data) {
                 $('#resultsList').html(data);
             });
-        });
+        }
+
+        $('#searchInput').on('keyup', refreshPlayers);
+        $('#filterSelect').on('change', refreshPlayers);
     });
 </script>
 

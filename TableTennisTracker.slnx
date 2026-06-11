@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="TableTennisTracker.Domain/TableTennisTracker.Domain.csproj" />
   <Project Path="TableTennisTracker.Web/TableTennisTracker.Web.csproj" />
+  <Project Path="TableTennisTracker.Web.IntegrationTests/TableTennisTracker.Web.IntegrationTests.csproj" />
   <Project Path="TableTennisTracker.Console/TableTennisTracker.Console.csproj" />
 </Solution>

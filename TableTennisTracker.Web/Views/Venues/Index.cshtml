@@ -46,6 +46,16 @@
         color: #6b7280;
     }
 
+    .filter-select {
+        min-width: 160px;
+        padding: 10px 14px;
+        background: rgba(139, 92, 246, 0.15);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        border-radius: 8px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+    }
+
     .btn-primary {
         background: rgba(139, 92, 246, 0.9);
         color: white;
@@ -142,6 +152,12 @@
 <div class="venues-header">
     <h1>🏢 Venues</h1>
     <div class="header-controls">
+        <select id="filterSelect" class="filter-select">
+            <option value="all">All fields</option>
+            <option value="name">Name</option>
+            <option value="city">City</option>
+            <option value="country">Country</option>
+        </select>
         <input type="text" id="searchInput" class="search-box" placeholder="Search venues by name or city...">
         <a href="/venues/create" class="btn-primary">+ Add New Venue</a>
     </div>
@@ -153,11 +169,15 @@
 
 <script>
     $(document).ready(function() {
-        $('#searchInput').on('keyup', function() {
-            var query = $(this).val();
-            $.get('/venues/search?query=' + encodeURIComponent(query), function(data) {
+        function refreshVenues() {
+            var query = $('#searchInput').val();
+            var filter = $('#filterSelect').val();
+            $.get('/venues/search?query=' + encodeURIComponent(query) + '&filter=' + encodeURIComponent(filter), function(data) {
                 $('#resultsList').html(data);
             });
-        });
+        }
+
+        $('#searchInput').on('keyup', refreshVenues);
+        $('#filterSelect').on('change', refreshVenues);
     });
 </script>

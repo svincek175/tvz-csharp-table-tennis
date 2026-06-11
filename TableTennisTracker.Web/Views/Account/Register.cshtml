@@ -1,0 +1,148 @@
+@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Register", "/Account/Register") };
+}
+
+<style>
+    .auth-container {
+        max-width: 420px;
+        margin: 60px auto;
+        padding: 32px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .auth-header h1 {
+        font-size: 1.8rem;
+        color: #ffed4e;
+        margin: 0;
+    }
+
+    .auth-header p {
+        color: #b0b0b0;
+        margin-top: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group label {
+        display: block;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        font-size: 0.95rem;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #ffed4e;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+        border: 0;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #ffed4e, #ff9f1c);
+        color: #10131a;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 20px;
+        color: #b0b0b0;
+    }
+
+    .login-link a {
+        color: #ffed4e;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .field-validation-error {
+        color: #ffb3b3;
+        font-size: 0.85rem;
+        margin-top: 4px;
+    }
+</style>
+
+<div class="index-container">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>Create Account</h1>
+            <p>Join the table tennis community</p>
+        </div>
+
+        <form method="post" action="@Url.Action(nameof(AccountController.Register))">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label for="FirstName">First Name</label>
+                <input asp-for="FirstName" type="text" id="FirstName" />
+                <span asp-validation-for="FirstName" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="LastName">Last Name</label>
+                <input asp-for="LastName" type="text" id="LastName" />
+                <span asp-validation-for="LastName" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Email">Email Address</label>
+                <input asp-for="Email" type="email" id="Email" />
+                <span asp-validation-for="Email" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <input asp-for="Password" type="password" id="Password" />
+                <span asp-validation-for="Password" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="ConfirmPassword">Confirm Password</label>
+                <input asp-for="ConfirmPassword" type="password" id="ConfirmPassword" />
+                <span asp-validation-for="ConfirmPassword" class="field-validation-error"></span>
+            </div>
+
+            <input type="hidden" asp-for="ReturnUrl" />
+
+            <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a asp-action="Login">Log in here</a>
+        </div>
+    </div>
+</div>

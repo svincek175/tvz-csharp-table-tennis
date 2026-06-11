@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableTennisTracker.Domain.Models;
 using TableTennisTracker.Web.Infrastructure.Repositories;
@@ -25,7 +26,7 @@ public class MatchesController : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search(string query)
+    public async Task<IActionResult> Search(string query, string? filter = null)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -33,7 +34,7 @@ public class MatchesController : Controller
             return PartialView("_MatchesList", allMatches);
         }
 
-        var matches = await _matchRepository.SearchAsync(query);
+        var matches = await _matchRepository.SearchAsync(query, filter);
         return PartialView("_MatchesList", matches);
     }
 
@@ -67,6 +68,7 @@ public class MatchesController : Controller
     }
 
     [HttpGet("create")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create()
     {
         ViewBag.Tournaments = await _tournamentRepository.GetAllAsync();
@@ -75,8 +77,10 @@ public class MatchesController : Controller
 
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create(Match match)
     {
+        NormalizeMatchDateTimes(match);
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Match.TournamentId), match.TournamentId, "Tournament is required.");
 
         if (!ModelState.IsValid)
@@ -90,6 +94,7 @@ public class MatchesController : Controller
     }
 
     [HttpGet("edit/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id)
     {
         var match = await _matchRepository.GetByIdAsync(id);
@@ -104,6 +109,7 @@ public class MatchesController : Controller
 
     [HttpPost("edit/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id, Match match)
     {
         if (id != match.Id)
@@ -111,6 +117,7 @@ public class MatchesController : Controller
             return BadRequest();
         }
 
+        NormalizeMatchDateTimes(match);
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Match.TournamentId), match.TournamentId, "Tournament is required.");
 
         if (!ModelState.IsValid)
@@ -123,7 +130,19 @@ public class MatchesController : Controller
         return RedirectToAction(nameof(Details), new { id });
     }
 
+    private static void NormalizeMatchDateTimes(Match match)
+    {
+        match.ScheduledStartUtc = DateTime.SpecifyKind(match.ScheduledStartUtc, DateTimeKind.Utc);
+        match.ActualStartUtc = match.ActualStartUtc.HasValue
+            ? DateTime.SpecifyKind(match.ActualStartUtc.Value, DateTimeKind.Utc)
+            : null;
+        match.CompletedUtc = match.CompletedUtc.HasValue
+            ? DateTime.SpecifyKind(match.CompletedUtc.Value, DateTimeKind.Utc)
+            : null;
+    }
+
     [HttpGet("delete/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var match = await _matchRepository.GetByIdAsync(id);
@@ -137,6 +156,7 @@ public class MatchesController : Controller
 
     [HttpPost("delete/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
         await _matchRepository.DeleteAsync(id);

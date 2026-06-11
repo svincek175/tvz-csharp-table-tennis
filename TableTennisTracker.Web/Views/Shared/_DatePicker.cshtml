@@ -31,7 +31,11 @@
         enableTime: @(Model.EnableTime ? "true" : "false"),
         time_24hr: true,
         allowInput: true,
-        altInputClass: 'form-control datepicker-alt-input'
+        altInputClass: 'form-control datepicker-alt-input',
+        onChange: function (selectedDates, dateStr, instance) {
+            instance.input.dispatchEvent(new Event('input', { bubbles: true }));
+            instance.input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
     });
 })();
 </script>

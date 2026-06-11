@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "Access Denied";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Access Denied", "/Account/AccessDenied") };
+}
+
+<style>
+    .status-container {
+        max-width: 520px;
+        margin: 80px auto;
+        padding: 34px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 110, 110, 0.45);
+        text-align: center;
+    }
+
+    .status-container h1 {
+        color: #ff8787;
+        margin-bottom: 12px;
+    }
+
+    .status-container p {
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .status-link {
+        color: #ffed4e;
+        text-decoration: none;
+        font-weight: 700;
+    }
+</style>
+
+<div class="index-container">
+    <div class="status-container">
+        <h1>Access Denied</h1>
+        <p>You do not have permission to access this resource.</p>
+        <a href="/" class="status-link">Back to Home</a>
+    </div>
+</div>

@@ -41,6 +41,16 @@
         min-width: 0;
     }
 
+    .filter-select {
+        min-width: 160px;
+        padding: 10px 14px;
+        background: rgba(139, 92, 246, 0.15);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        border-radius: 8px;
+        color: #e0e7ff;
+        font-size: 0.9rem;
+    }
+
     .search-box::placeholder {
         color: #6b7280;
     }
@@ -336,6 +346,12 @@
         <h1>👫 Match Participants</h1>
         <p style="color: #a5b4fc; margin-top: 8px;">Track all participants across matches</p>
         <div class="participants-controls">
+            <select id="filterSelect" class="filter-select">
+                <option value="all">All fields</option>
+                <option value="player">Player</option>
+                <option value="match">Match</option>
+                <option value="slot">Slot</option>
+            </select>
             <input type="text" class="search-box" placeholder="Search by player name..." id="participantSearch">
             <a href="/match-participants/create" class="btn-primary">+ Add New Participant</a>
         </div>
@@ -354,7 +370,7 @@
         <div class="participants-list">
             @foreach (var participant in Model.OrderBy(p => p.MatchId).ThenBy(p => p.Slot))
             {
-                <div class="participant-row">
+                <div class="participant-row" data-all="@($"{participant.Player?.FirstName} {participant.Player?.LastName} {participant.Match?.Tournament?.Name} {participant.Slot}".ToLowerInvariant())" data-player="@($"{participant.Player?.FirstName} {participant.Player?.LastName}".ToLowerInvariant())" data-match="@($"{participant.Match?.Tournament?.Name} r{participant.Match?.RoundNumber}".ToLowerInvariant())" data-slot="@participant.Slot">
                     <div class="match-info">
                         <div class="match-id-label">Match ID</div>
                         <div class="match-id-value">#@participant.MatchId</div>
@@ -393,11 +409,26 @@
 </div>
 
 <script>
-    document.getElementById('participantSearch')?.addEventListener('keyup', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
+    const participantSearch = document.getElementById('participantSearch');
+    const filterSelect = document.getElementById('filterSelect');
+
+    function refreshParticipants() {
+        const searchTerm = (participantSearch?.value ?? '').toLowerCase();
+        const filter = filterSelect?.value ?? 'all';
+
         document.querySelectorAll('.participant-row').forEach(row => {
-            const playerName = row.querySelector('.player-name').textContent.toLowerCase();
-            row.style.display = playerName.includes(searchTerm) ? '' : 'none';
+            const value = filter === 'player'
+                ? row.getAttribute('data-player') ?? ''
+                : filter === 'match'
+                    ? row.getAttribute('data-match') ?? ''
+                    : filter === 'slot'
+                        ? row.getAttribute('data-slot') ?? ''
+                        : row.getAttribute('data-all') ?? '';
+
+            row.style.display = value.includes(searchTerm) ? '' : 'none';
         });
-    });
+    }
+
+    participantSearch?.addEventListener('keyup', refreshParticipants);
+    filterSelect?.addEventListener('change', refreshParticipants);
 </script>

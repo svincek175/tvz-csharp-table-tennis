@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TableTennisTracker.Domain.Models;
+using TableTennisTracker.Web.Infrastructure.Identity;
 
 namespace TableTennisTracker.Web.Infrastructure;
 
-public class TableTennisTrackerDbContext : DbContext
+public class TableTennisTrackerDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
 {
     public TableTennisTrackerDbContext(DbContextOptions<TableTennisTrackerDbContext> options)
         : base(options)
@@ -17,6 +20,7 @@ public class TableTennisTrackerDbContext : DbContext
     public DbSet<Match> Matches => Set<Match>();
     public DbSet<MatchParticipant> MatchParticipants => Set<MatchParticipant>();
     public DbSet<MatchSetResult> MatchSetResults => Set<MatchSetResult>();
+    public DbSet<QuizFile> QuizFiles => Set<QuizFile>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -85,5 +89,8 @@ public class TableTennisTrackerDbContext : DbContext
         modelBuilder.Entity<MatchSetResult>()
             .HasIndex(sr => new { sr.MatchId, sr.SetNumber })
             .IsUnique();
+
+        modelBuilder.Entity<QuizFile>()
+            .HasIndex(q => q.UploadedUtc);
     }
 }

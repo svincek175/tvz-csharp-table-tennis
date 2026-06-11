@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "External Login Failed";
+    ViewData["Breadcrumbs"] = new List<(string, string)> { ("Home", "/"), ("Login", "/Account/Login"), ("External Login Failed", "/Account/ExternalLoginFailure") };
+}
+
+<style>
+    .status-container {
+        max-width: 520px;
+        margin: 80px auto;
+        padding: 34px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 110, 110, 0.45);
+        text-align: center;
+    }
+
+    .status-container h1 {
+        color: #ff8787;
+        margin-bottom: 12px;
+    }
+
+    .status-container p {
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .status-link {
+        color: #ffed4e;
+        text-decoration: none;
+        font-weight: 700;
+    }
+</style>
+
+<div class="index-container">
+    <div class="status-container">
+        <h1>External Sign-in Failed</h1>
+        <p>We could not complete sign-in with your external provider. Please try again or use email and password login.</p>
+        <a asp-action="Login" class="status-link">Back to Login</a>
+    </div>
+</div>

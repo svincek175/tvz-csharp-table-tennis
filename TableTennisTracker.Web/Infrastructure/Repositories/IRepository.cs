@@ -5,7 +5,7 @@ namespace TableTennisTracker.Web.Infrastructure.Repositories;
 public interface ITournamentRepository
 {
     Task<IEnumerable<Tournament>> GetAllAsync();
-    Task<IEnumerable<Tournament>> SearchAsync(string query);
+    Task<IEnumerable<Tournament>> SearchAsync(string query, string? filter = null);
     Task<Tournament?> GetByIdAsync(Guid id);
     Task<Guid> CreateAsync(Tournament tournament);
     Task UpdateAsync(Tournament tournament);
@@ -15,7 +15,7 @@ public interface ITournamentRepository
 public interface IVenueRepository
 {
     Task<IEnumerable<Venue>> GetAllAsync();
-    Task<IEnumerable<Venue>> SearchAsync(string query);
+    Task<IEnumerable<Venue>> SearchAsync(string query, string? filter = null);
     Task<Venue?> GetByIdAsync(Guid id);
     Task<Guid> CreateAsync(Venue venue);
     Task UpdateAsync(Venue venue);
@@ -25,7 +25,7 @@ public interface IVenueRepository
 public interface IPlayerRepository
 {
     Task<IEnumerable<Player>> GetAllAsync();
-    Task<IEnumerable<Player>> SearchAsync(string query);
+    Task<IEnumerable<Player>> SearchAsync(string query, string? filter = null);
     Task<Player?> GetByIdAsync(Guid id);
     Task<Guid> CreateAsync(Player player);
     Task UpdateAsync(Player player);
@@ -35,7 +35,7 @@ public interface IPlayerRepository
 public interface IMatchRepository
 {
     Task<IEnumerable<Match>> GetAllAsync();
-    Task<IEnumerable<Match>> SearchAsync(string query);
+    Task<IEnumerable<Match>> SearchAsync(string query, string? filter = null);
     Task<Match?> GetByIdAsync(Guid id);
     Task<IEnumerable<Match>> GetByTournamentIdAsync(Guid tournamentId);
     Task<Guid> CreateAsync(Match match);
@@ -46,7 +46,7 @@ public interface IMatchRepository
 public interface IRegistrationRepository
 {
     Task<IEnumerable<Registration>> GetAllAsync();
-    Task<IEnumerable<Registration>> SearchAsync(string query);
+    Task<IEnumerable<Registration>> SearchAsync(string query, string? filter = null);
     Task<Registration?> GetByIdAsync(Guid id);
     Task<IEnumerable<Registration>> GetByTournamentIdAsync(Guid tournamentId);
     Task<Guid> CreateAsync(Registration registration);
@@ -57,7 +57,7 @@ public interface IRegistrationRepository
 public interface IMatchParticipantRepository
 {
     Task<IEnumerable<MatchParticipant>> GetAllAsync();
-    Task<IEnumerable<MatchParticipant>> SearchAsync(string query);
+    Task<IEnumerable<MatchParticipant>> SearchAsync(string query, string? filter = null);
     Task<MatchParticipant?> GetByIdAsync(Guid id);
     Task<IEnumerable<MatchParticipant>> GetByMatchIdAsync(Guid matchId);
     Task<Guid> CreateAsync(MatchParticipant matchParticipant);
@@ -68,7 +68,7 @@ public interface IMatchParticipantRepository
 public interface IMatchSetResultRepository
 {
     Task<IEnumerable<MatchSetResult>> GetAllAsync();
-    Task<IEnumerable<MatchSetResult>> SearchAsync(string query);
+    Task<IEnumerable<MatchSetResult>> SearchAsync(string query, string? filter = null);
     Task<MatchSetResult?> GetByIdAsync(Guid id);
     Task<IEnumerable<MatchSetResult>> GetByMatchIdAsync(Guid matchId);
     Task<Guid> CreateAsync(MatchSetResult matchSetResult);

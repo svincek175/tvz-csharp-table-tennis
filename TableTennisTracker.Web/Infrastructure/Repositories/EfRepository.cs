@@ -11,6 +11,106 @@ public abstract class EfRepositoryBase
     {
         DbContext = dbContext;
     }
+
+    protected static string NormalizeFilter(string? filter)
+    {
+        return string.IsNullOrWhiteSpace(filter) ? "all" : filter.Trim().ToLowerInvariant();
+    }
+
+    protected static IQueryable<Tournament> ApplyTournamentFilter(IQueryable<Tournament> query, string lowerQuery, string? filter)
+    {
+        return NormalizeFilter(filter) switch
+        {
+            "name" => query.Where(t => t.Name.ToLower().Contains(lowerQuery)),
+            "season" => query.Where(t => t.SeasonLabel.ToLower().Contains(lowerQuery)),
+            "organizer" => query.Where(t => t.OrganizerName.ToLower().Contains(lowerQuery)),
+            _ => query.Where(t => t.Name.ToLower().Contains(lowerQuery) ||
+                                   t.SeasonLabel.ToLower().Contains(lowerQuery) ||
+                                   t.OrganizerName.ToLower().Contains(lowerQuery))
+        };
+    }
+
+    protected static IQueryable<Venue> ApplyVenueFilter(IQueryable<Venue> query, string lowerQuery, string? filter)
+    {
+        return NormalizeFilter(filter) switch
+        {
+            "name" => query.Where(v => v.Name.ToLower().Contains(lowerQuery)),
+            "city" => query.Where(v => v.City.ToLower().Contains(lowerQuery)),
+            "country" => query.Where(v => v.CountryCode.ToLower().Contains(lowerQuery)),
+            _ => query.Where(v => v.Name.ToLower().Contains(lowerQuery) ||
+                                  v.City.ToLower().Contains(lowerQuery) ||
+                                  v.CountryCode.ToLower().Contains(lowerQuery))
+        };
+    }
+
+    protected static IQueryable<Player> ApplyPlayerFilter(IQueryable<Player> query, string lowerQuery, string? filter)
+    {
+        return NormalizeFilter(filter) switch
+        {
+            "name" => query.Where(p => p.FirstName.ToLower().Contains(lowerQuery) ||
+                                        p.LastName.ToLower().Contains(lowerQuery)),
+            "country" => query.Where(p => p.CountryCode.ToLower().Contains(lowerQuery)),
+            "status" => query.Where(p => (p.IsActive ? "active" : "inactive").Contains(lowerQuery)),
+            _ => query.Where(p => p.FirstName.ToLower().Contains(lowerQuery) ||
+                                   p.LastName.ToLower().Contains(lowerQuery) ||
+                                   p.CountryCode.ToLower().Contains(lowerQuery))
+        };
+    }
+
+    protected static IQueryable<Match> ApplyMatchFilter(IQueryable<Match> query, string lowerQuery, string? filter)
+    {
+        return NormalizeFilter(filter) switch
+        {
+            "tournament" => query.Where(m => m.Tournament.Name.ToLower().Contains(lowerQuery)),
+            "round" => query.Where(m => m.RoundNumber.ToString().Contains(lowerQuery)),
+            "status" => query.Where(m => m.Status.ToString().ToLower().Contains(lowerQuery)),
+            _ => query.Where(m => m.Tournament.Name.ToLower().Contains(lowerQuery) ||
+                                  m.RoundNumber.ToString().Contains(lowerQuery) ||
+                                  m.Status.ToString().ToLower().Contains(lowerQuery))
+        };
+    }
+
+    protected static IQueryable<Registration> ApplyRegistrationFilter(IQueryable<Registration> query, string lowerQuery, string? filter)
+    {
+        return NormalizeFilter(filter) switch
+        {
+            "player" => query.Where(r => r.Player.FirstName.ToLower().Contains(lowerQuery) ||
+                                          r.Player.LastName.ToLower().Contains(lowerQuery)),
+            "tournament" => query.Where(r => r.Tournament.Name.ToLower().Contains(lowerQuery)),
+            "checkedin" => query.Where(r => (r.IsCheckedIn ? "checked in" : "not checked in").Contains(lowerQuery)),
+            _ => query.Where(r => r.Player.FirstName.ToLower().Contains(lowerQuery) ||
+                                   r.Player.LastName.ToLower().Contains(lowerQuery) ||
+                                   r.Tournament.Name.ToLower().Contains(lowerQuery))
+        };
+    }
+
+    protected static IQueryable<MatchParticipant> ApplyMatchParticipantFilter(IQueryable<MatchParticipant> query, string lowerQuery, string? filter)
+    {
+        return NormalizeFilter(filter) switch
+        {
+            "player" => query.Where(mp => mp.Player.FirstName.ToLower().Contains(lowerQuery) ||
+                                           mp.Player.LastName.ToLower().Contains(lowerQuery)),
+            "match" => query.Where(mp => mp.Match.Tournament.Name.ToLower().Contains(lowerQuery) ||
+                                          mp.Match.RoundNumber.ToString().Contains(lowerQuery)),
+            "slot" => query.Where(mp => mp.Slot.ToString().Contains(lowerQuery)),
+            _ => query.Where(mp => mp.Player.FirstName.ToLower().Contains(lowerQuery) ||
+                                   mp.Player.LastName.ToLower().Contains(lowerQuery) ||
+                                   mp.Match.Tournament.Name.ToLower().Contains(lowerQuery))
+        };
+    }
+
+    protected static IQueryable<MatchSetResult> ApplyMatchSetResultFilter(IQueryable<MatchSetResult> query, string lowerQuery, string? filter)
+    {
+        return NormalizeFilter(filter) switch
+        {
+            "tournament" => query.Where(sr => sr.Match.Tournament.Name.ToLower().Contains(lowerQuery)),
+            "set" => query.Where(sr => sr.SetNumber.ToString().Contains(lowerQuery)),
+            "score" => query.Where(sr => sr.PlayerOnePoints.ToString().Contains(lowerQuery) ||
+                                          sr.PlayerTwoPoints.ToString().Contains(lowerQuery)),
+            _ => query.Where(sr => sr.Match.Tournament.Name.ToLower().Contains(lowerQuery) ||
+                                   sr.SetNumber.ToString().Contains(lowerQuery))
+        };
+    }
 }
 
 public class EfTournamentRepository : EfRepositoryBase, ITournamentRepository
@@ -37,16 +137,17 @@ public class EfTournamentRepository : EfRepositoryBase, ITournamentRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Tournament>> SearchAsync(string query)
+    public async Task<IEnumerable<Tournament>> SearchAsync(string query, string? filter = null)
     {
         var lowerQuery = query.ToLower();
-        return await DbContext.Tournaments
+        var tournaments = DbContext.Tournaments
             .AsNoTracking()
-            .Where(t => t.Name.ToLower().Contains(lowerQuery) || 
-                        t.SeasonLabel.ToLower().Contains(lowerQuery))
             .Include(t => t.Venue)
             .AsSplitQuery()
-            .ToListAsync();
+            .AsQueryable();
+
+        tournaments = ApplyTournamentFilter(tournaments, lowerQuery, filter);
+        return await tournaments.ToListAsync();
     }
 
     public async Task<Tournament?> GetByIdAsync(Guid id)
@@ -107,15 +208,16 @@ public class EfVenueRepository : EfRepositoryBase, IVenueRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Venue>> SearchAsync(string query)
+    public async Task<IEnumerable<Venue>> SearchAsync(string query, string? filter = null)
     {
         var lowerQuery = query.ToLower();
-        return await DbContext.Venues
+        var venues = DbContext.Venues
             .AsNoTracking()
-            .Where(v => v.Name.ToLower().Contains(lowerQuery) || 
-                        v.City.ToLower().Contains(lowerQuery))
             .AsSplitQuery()
-            .ToListAsync();
+            .AsQueryable();
+
+        venues = ApplyVenueFilter(venues, lowerQuery, filter);
+        return await venues.ToListAsync();
     }
 
     public async Task<Venue?> GetByIdAsync(Guid id)
@@ -170,16 +272,16 @@ public class EfPlayerRepository : EfRepositoryBase, IPlayerRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Player>> SearchAsync(string query)
+    public async Task<IEnumerable<Player>> SearchAsync(string query, string? filter = null)
     {
         var lowerQuery = query.ToLower();
-        return await DbContext.Players
+        var players = DbContext.Players
             .AsNoTracking()
-            .Where(p => p.FirstName.ToLower().Contains(lowerQuery) || 
-                        p.LastName.ToLower().Contains(lowerQuery) ||
-                        p.CountryCode.ToLower().Contains(lowerQuery))
             .AsSplitQuery()
-            .ToListAsync();
+            .AsQueryable();
+
+        players = ApplyPlayerFilter(players, lowerQuery, filter);
+        return await players.ToListAsync();
     }
 
     public async Task<Player?> GetByIdAsync(Guid id)
@@ -240,17 +342,22 @@ public class EfMatchRepository : EfRepositoryBase, IMatchRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Match>> SearchAsync(string query)
+    public async Task<IEnumerable<Match>> SearchAsync(string query, string? filter = null)
     {
         var lowerQuery = query.ToLower();
-        return await DbContext.Matches
+        var matches = DbContext.Matches
             .AsNoTracking()
-            .Where(m => m.Tournament.Name.ToLower().Contains(lowerQuery) ||
-                        m.RoundNumber.ToString().Contains(lowerQuery))
             .Include(m => m.Tournament)
                 .ThenInclude(t => t.Venue)
+            .Include(m => m.WinnerPlayer)
+            .Include(m => m.Participants)
+                .ThenInclude(mp => mp.Player)
+            .Include(m => m.SetResults)
             .AsSplitQuery()
-            .ToListAsync();
+            .AsQueryable();
+
+        matches = ApplyMatchFilter(matches, lowerQuery, filter);
+        return await matches.ToListAsync();
     }
 
     public async Task<Match?> GetByIdAsync(Guid id)
@@ -324,19 +431,19 @@ public class EfRegistrationRepository : EfRepositoryBase, IRegistrationRepositor
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Registration>> SearchAsync(string query)
+    public async Task<IEnumerable<Registration>> SearchAsync(string query, string? filter = null)
     {
         var lowerQuery = query.ToLower();
-        return await DbContext.Registrations
+        var registrations = DbContext.Registrations
             .AsNoTracking()
-            .Where(r => r.Player.FirstName.ToLower().Contains(lowerQuery) ||
-                        r.Player.LastName.ToLower().Contains(lowerQuery) ||
-                        r.Tournament.Name.ToLower().Contains(lowerQuery))
             .Include(r => r.Player)
             .Include(r => r.Tournament)
                 .ThenInclude(t => t.Venue)
             .AsSplitQuery()
-            .ToListAsync();
+            .AsQueryable();
+
+        registrations = ApplyRegistrationFilter(registrations, lowerQuery, filter);
+        return await registrations.ToListAsync();
     }
 
     public async Task<Registration?> GetByIdAsync(Guid id)
@@ -406,20 +513,20 @@ public class EfMatchParticipantRepository : EfRepositoryBase, IMatchParticipantR
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<MatchParticipant>> SearchAsync(string query)
+    public async Task<IEnumerable<MatchParticipant>> SearchAsync(string query, string? filter = null)
     {
         var lowerQuery = query.ToLower();
-        return await DbContext.MatchParticipants
+        var participants = DbContext.MatchParticipants
             .AsNoTracking()
-            .Where(mp => mp.Player.FirstName.ToLower().Contains(lowerQuery) ||
-                         mp.Player.LastName.ToLower().Contains(lowerQuery) ||
-                         mp.Match.Tournament.Name.ToLower().Contains(lowerQuery))
             .Include(mp => mp.Match)
                 .ThenInclude(m => m.Tournament)
                     .ThenInclude(t => t.Venue)
             .Include(mp => mp.Player)
             .AsSplitQuery()
-            .ToListAsync();
+            .AsQueryable();
+
+        participants = ApplyMatchParticipantFilter(participants, lowerQuery, filter);
+        return await participants.ToListAsync();
     }
 
     public async Task<MatchParticipant?> GetByIdAsync(Guid id)
@@ -489,18 +596,19 @@ public class EfMatchSetResultRepository : EfRepositoryBase, IMatchSetResultRepos
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<MatchSetResult>> SearchAsync(string query)
+    public async Task<IEnumerable<MatchSetResult>> SearchAsync(string query, string? filter = null)
     {
         var lowerQuery = query.ToLower();
-        return await DbContext.MatchSetResults
+        var setResults = DbContext.MatchSetResults
             .AsNoTracking()
-            .Where(sr => sr.Match.Tournament.Name.ToLower().Contains(lowerQuery) ||
-                         sr.SetNumber.ToString().Contains(lowerQuery))
             .Include(sr => sr.Match)
                 .ThenInclude(m => m.Tournament)
                     .ThenInclude(t => t.Venue)
             .AsSplitQuery()
-            .ToListAsync();
+            .AsQueryable();
+
+        setResults = ApplyMatchSetResultFilter(setResults, lowerQuery, filter);
+        return await setResults.ToListAsync();
     }
 
     public async Task<MatchSetResult?> GetByIdAsync(Guid id)

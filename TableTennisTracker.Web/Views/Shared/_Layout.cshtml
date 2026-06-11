@@ -578,6 +578,35 @@
                     <span>Quiz Master</span>
                 </a>
             </nav>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Account</div>
+                @if (User?.Identity?.IsAuthenticated == true)
+                {
+                    <div class="nav-link" style="cursor: default; opacity: 0.85;">
+                        <span class="nav-icon">👤</span>
+                        <span>@(User.Identity?.Name ?? "Signed in")</span>
+                    </div>
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="nav-link" style="width: 100%; border: 0; background: transparent; text-align: left; cursor: pointer;">
+                            <span class="nav-icon">🚪</span>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a href="/Account/Login" class="nav-link" data-breadcrumb="Login">
+                        <span class="nav-icon">🔐</span>
+                        <span>Login</span>
+                    </a>
+                    <a href="/Account/Register" class="nav-link" data-breadcrumb="Register">
+                        <span class="nav-icon">📝</span>
+                        <span>Register</span>
+                    </a>
+                }
+            </nav>
         </aside>
 
         <!-- MAIN CONTENT -->

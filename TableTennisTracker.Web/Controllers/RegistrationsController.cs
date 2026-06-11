@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableTennisTracker.Domain.Models;
 using TableTennisTracker.Web.Infrastructure.Repositories;
@@ -27,7 +28,7 @@ public class RegistrationsController : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search(string query)
+    public async Task<IActionResult> Search(string query, string? filter = null)
     {
         if (string.IsNullOrWhiteSpace(query))
         {
@@ -35,7 +36,7 @@ public class RegistrationsController : Controller
             return PartialView("_RegistrationsList", allRegistrations);
         }
 
-        var registrations = await _registrationRepository.SearchAsync(query);
+        var registrations = await _registrationRepository.SearchAsync(query, filter);
         return PartialView("_RegistrationsList", registrations);
     }
 
@@ -52,6 +53,7 @@ public class RegistrationsController : Controller
     }
 
     [HttpGet("create")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create()
     {
         ViewBag.Players = await _playerRepository.GetAllAsync();
@@ -95,8 +97,10 @@ public class RegistrationsController : Controller
 
     [HttpPost("create")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create(Registration registration)
     {
+        NormalizeRegistrationDateTimes(registration);
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Registration.PlayerId), registration.PlayerId, "Player is required.");
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Registration.TournamentId), registration.TournamentId, "Tournament is required.");
 
@@ -112,6 +116,7 @@ public class RegistrationsController : Controller
     }
 
     [HttpGet("edit/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id)
     {
         var registration = await _registrationRepository.GetByIdAsync(id);
@@ -127,6 +132,7 @@ public class RegistrationsController : Controller
 
     [HttpPost("edit/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id, Registration registration)
     {
         if (id != registration.Id)
@@ -134,6 +140,7 @@ public class RegistrationsController : Controller
             return BadRequest();
         }
 
+        NormalizeRegistrationDateTimes(registration);
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Registration.PlayerId), registration.PlayerId, "Player is required.");
         ValidationHelper.EnsureNotEmptyGuid(ModelState, nameof(Registration.TournamentId), registration.TournamentId, "Tournament is required.");
 
@@ -148,7 +155,13 @@ public class RegistrationsController : Controller
         return RedirectToAction(nameof(Details), new { id });
     }
 
+    private static void NormalizeRegistrationDateTimes(Registration registration)
+    {
+        registration.RegisteredUtc = DateTime.SpecifyKind(registration.RegisteredUtc, DateTimeKind.Utc);
+    }
+
     [HttpGet("delete/{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var registration = await _registrationRepository.GetByIdAsync(id);
@@ -162,6 +175,7 @@ public class RegistrationsController : Controller
 
     [HttpPost("delete/{id:guid}")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
         await _registrationRepository.DeleteAsync(id);
